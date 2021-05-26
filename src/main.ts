@@ -56,14 +56,14 @@ app.whenReady().then(() => {
   console.log(`Loaded ${trayIconPath} ${tray}`);
 
   const contextMenu = Menu.buildFromTemplate([
-    { label: "Item1", type: "radio" },
-    { label: "Item2", type: "radio" },
+    { label: "Item1", type: "normal" },
+    { type: "separator" },
     { label: "Item3", type: "radio", checked: true },
     { label: "Item4", type: "radio" },
+    { label: "Quit", role: "quit" },
   ]);
 
-  tray.setToolTip("This is my application.");
-  tray.setTitle("Git Auto Sync");
+  tray.setToolTip("GitAutoSync");
   tray.setContextMenu(contextMenu);
 });
 
