@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, Menu, Tray, nativeImage } from "electron";
 import * as path from "path";
 
 function createWindow() {
@@ -42,3 +42,29 @@ app.on("window-all-closed", () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+
+//
+// Tray Code
+
+var trayIconPath = path.join(__dirname, "../assets/folder-green-git-icon.png");
+
+let tray = null;
+app.whenReady().then(() => {
+  var image = nativeImage.createFromPath(trayIconPath);
+
+  tray = new Tray(image.resize({ width: 32, height: 32 }));
+  console.log(`Loaded ${trayIconPath} ${tray}`);
+
+  const contextMenu = Menu.buildFromTemplate([
+    { label: "Item1", type: "radio" },
+    { label: "Item2", type: "radio" },
+    { label: "Item3", type: "radio", checked: true },
+    { label: "Item4", type: "radio" },
+  ]);
+
+  tray.setToolTip("This is my application.");
+  tray.setTitle("Git Auto Sync");
+  tray.setContextMenu(contextMenu);
+});
+
+console.log("huh?");
