@@ -14,5 +14,8 @@
     "electron": "^9.4.0",
     "eslint": "^7.27.0",
     "typescript": "^3.9.5"
+  },
+  "dependencies": {
+    "simple-git": "^2.39.1"
   }
 }

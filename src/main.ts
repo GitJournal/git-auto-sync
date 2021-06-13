@@ -45,7 +45,7 @@ app.on("window-all-closed", () => {
 
 //
 // Tray Code
-
+//
 var trayIconPath = path.join(__dirname, "../assets/folder-green-git-icon.png");
 
 let tray = null;
@@ -68,3 +68,40 @@ app.whenReady().then(() => {
 });
 
 console.log("huh?");
+
+// Main logic
+/*
+  cd /Users/vishesh/notes
+  gstatus=`git status --porcelain`
+
+  if [ ${#gstatus} -ne 0 ]
+  then
+      git add --all
+      git commit -m "$gstatus"
+
+      git pull --rebase
+      git push
+  else
+    git pull
+  fi
+*/
+
+import simpleGit, { SimpleGit, SimpleGitOptions } from "simple-git";
+
+const options: Partial<SimpleGitOptions> = {
+  baseDir: process.cwd(),
+  binary: "git",
+  maxConcurrentProcesses: 1,
+};
+
+async function mainLoop() {
+  const git: SimpleGit = simpleGit(options);
+  var statusResult = await git.status();
+  console.log(statusResult);
+
+  console.log(statusResult.files);
+}
+
+mainLoop();
+
+// I need some test data!
