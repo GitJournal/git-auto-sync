@@ -105,6 +105,7 @@ async function mainLoop() {
 
   if (!createdFiles && !modifiedFiles && !deletedFiles && !renamedFiles) {
     console.log("Clean. Nothing to do");
+    console.log(statusResult);
     return;
   }
 
