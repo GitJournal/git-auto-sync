@@ -88,8 +88,10 @@ console.log("huh?");
 
 import simpleGit, { SimpleGit, SimpleGitOptions } from "simple-git";
 
+var repoPath = "/tmp/journal";
+
 const options: Partial<SimpleGitOptions> = {
-  baseDir: process.cwd(),
+  baseDir: repoPath,
   binary: "git",
   maxConcurrentProcesses: 1,
 };
@@ -104,8 +106,8 @@ async function mainLoop() {
   var renamedFiles = statusResult.renamed.length != 0;
 
   if (!createdFiles && !modifiedFiles && !deletedFiles && !renamedFiles) {
+    // FIXME: Pull and push changes
     console.log("Clean. Nothing to do");
-    console.log(statusResult);
     return;
   }
 
@@ -127,7 +129,7 @@ mainLoop();
 import * as chokidar from "chokidar";
 
 var timeout: NodeJS.Timeout;
-chokidar.watch("/tmp/journal").on("all", (event, path) => {
+chokidar.watch(repoPath).on("all", (event, path) => {
   //console.log(event, path);
 
   if (timeout != null) {
