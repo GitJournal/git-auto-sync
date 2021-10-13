@@ -16,6 +16,7 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
+    "chokidar": "^3.5.2",
     "simple-git": "^2.39.1"
   }
 }

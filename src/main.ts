@@ -95,13 +95,47 @@ const options: Partial<SimpleGitOptions> = {
 };
 
 async function mainLoop() {
-  const git: SimpleGit = simpleGit(options);
-  var statusResult = await git.status();
-  console.log(statusResult);
+  const repo = simpleGit(options);
+  var statusResult = await repo.status();
 
-  console.log(statusResult.files);
+  var createdFiles = statusResult.created.length != 0;
+  var modifiedFiles = statusResult.modified.length != 0;
+  var deletedFiles = statusResult.deleted.length != 0;
+  var renamedFiles = statusResult.renamed.length != 0;
+
+  if (!createdFiles && !modifiedFiles && !deletedFiles && !renamedFiles) {
+    console.log("Clean. Nothing to do");
+    return;
+  }
+
+  await repo.add(".");
+  console.log("Added");
+
+  // FIXME: Better commit message!
+  await repo.commit("New changes");
+  await repo.pull({ "--rebase": null });
+  await repo.push();
+
+  console.log("Done");
+  timeout = null;
 }
 
 mainLoop();
 
 // I need some test data!
+
+// Watch for changes
+import * as chokidar from "chokidar";
+
+var timeout: NodeJS.Timeout;
+chokidar.watch("/tmp/journal").on("all", (event, path) => {
+  //console.log(event, path);
+
+  if (timeout != null) {
+    clearTimeout(timeout);
+    timeout = null;
+  }
+  timeout = setTimeout(mainLoop, 1000);
+});
+
+console.log("Listening for file changes");
