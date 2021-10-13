@@ -92,7 +92,11 @@ console.log("huh?");
   fi
 */
 
-import simpleGit, { SimpleGit, SimpleGitOptions } from "simple-git";
+import simpleGit, {
+  SimpleGit,
+  SimpleGitOptions,
+  StatusResult,
+} from "simple-git";
 
 var repoPath = "/tmp/journal";
 
@@ -120,13 +124,66 @@ async function mainLoop() {
   await repo.add(".");
   console.log("Added");
 
-  // FIXME: Better commit message!
-  await repo.commit("New changes");
+  await repo.commit(buildCommitMessage(statusResult));
   await repo.pull({ "--rebase": null });
   await repo.push();
 
   console.log("Done");
   timeout = null;
+}
+
+function buildCommitMessage(statusResult: StatusResult): string {
+  var createdFiles = statusResult.created.length;
+  var modifiedFiles = statusResult.modified.length;
+  var deletedFiles = statusResult.deleted.length;
+  var renamedFiles = statusResult.renamed.length;
+
+  console.log(`Created ${createdFiles}`);
+  console.log(`Modified ${modifiedFiles}`);
+  console.log(`Deleted ${deletedFiles}`);
+  console.log(`Renamed ${renamedFiles}`);
+
+  if (
+    createdFiles == 1 &&
+    modifiedFiles == 0 &&
+    deletedFiles == 0 &&
+    renamedFiles == 0
+  ) {
+    var filePath = statusResult.created[0];
+    return `Created file ${filePath}`;
+  }
+
+  if (
+    createdFiles == 0 &&
+    modifiedFiles == 1 &&
+    deletedFiles == 0 &&
+    renamedFiles == 0
+  ) {
+    var filePath = statusResult.modified[0];
+    return `Modified file ${filePath}`;
+  }
+
+  if (
+    createdFiles == 0 &&
+    modifiedFiles == 0 &&
+    deletedFiles == 1 &&
+    renamedFiles == 0
+  ) {
+    var filePath = statusResult.deleted[0];
+    return `Deleted file ${filePath}`;
+  }
+
+  if (
+    createdFiles == 0 &&
+    modifiedFiles == 0 &&
+    deletedFiles == 0 &&
+    renamedFiles == 1
+  ) {
+    var r = statusResult.renamed[0];
+    return `Renamed ${r.from} -> ${r.to}`;
+  }
+
+  return "AutoSave";
 }
 
 mainLoop();
