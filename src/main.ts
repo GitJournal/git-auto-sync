@@ -46,7 +46,13 @@ app.on("window-all-closed", () => {
 //
 // Tray Code
 //
+
+import fs = require("fs");
+
 var trayIconPath = path.join(__dirname, "../assets/folder-green-git-icon.png");
+if (!fs.existsSync(trayIconPath)) {
+  console.log("Tray Icon is missing");
+}
 
 let tray = null;
 app.whenReady().then(() => {
