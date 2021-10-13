@@ -123,8 +123,6 @@ async function mainLoop() {
 
 mainLoop();
 
-// I need some test data!
-
 // Watch for changes
 import * as chokidar from "chokidar";
 
@@ -136,7 +134,7 @@ chokidar.watch("/tmp/journal").on("all", (event, path) => {
     clearTimeout(timeout);
     timeout = null;
   }
-  timeout = setTimeout(mainLoop, 1000);
+  timeout = setTimeout(mainLoop, 100);
 });
 
 console.log("Listening for file changes");
