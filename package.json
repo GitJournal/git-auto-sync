@@ -17,6 +17,6 @@
   },
   "dependencies": {
     "chokidar": "^3.5.2",
-    "simple-git": "^2.39.1"
+    "simple-git": "^3.3.0"
   }
 }
