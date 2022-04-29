@@ -1,0 +1,24 @@
+Add another file in a subdir
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch master
+# Changes to be committed:
+#	new file:   dirA/2.md
+#
+# Changes not staged for commit:
+#	modified:   1.md
+#
+# Untracked files:
+#	dirB/
+#
+# ------------------------ >8 ------------------------
+# Do not modify or remove the line above.
+# Everything below it will be ignored.
+diff --git a/dirA/2.md b/dirA/2.md
+new file mode 100644
+index 0000000..0cfbf08
+--- /dev/null
++++ b/dirA/2.md
+@@ -0,0 +1 @@
++2

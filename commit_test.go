@@ -33,7 +33,6 @@ func Test_NoChanges(t *testing.T) {
 	err := commit(repoPath)
 	assert.NilError(t, err)
 
-	// Get the head commit
 	r, err := git.PlainOpen(repoPath)
 	assert.NilError(t, err)
 
@@ -49,7 +48,6 @@ func Test_NewFile(t *testing.T) {
 	err := commit(repoPath)
 	assert.NilError(t, err)
 
-	// Get the head commit
 	r, err := git.PlainOpen(repoPath)
 	assert.NilError(t, err)
 
@@ -59,8 +57,35 @@ func Test_NewFile(t *testing.T) {
 	assert.Assert(t, head.Hash() != plumbing.NewHash("28cc969d97ddb7640f5e1428bbc8f2947d1ffd57"))
 }
 
+func Test_OneFileChange(t *testing.T) {
+	repoPath := prepareFixture(t, "one_file_change")
+
+	err := commit(repoPath)
+	assert.NilError(t, err)
+
+	r, err := git.PlainOpen(repoPath)
+	assert.NilError(t, err)
+
+	head, err := r.Head()
+	assert.NilError(t, err)
+
+	assert.Assert(t, head.Hash() != plumbing.NewHash("28cc969d97ddb7640f5e1428bbc8f2947d1ffd57"))
+}
+
+func Test_MultipleFileChange(t *testing.T) {
+	repoPath := prepareFixture(t, "multiple_file_change")
+
+	err := commit(repoPath)
+	assert.NilError(t, err)
+
+	r, err := git.PlainOpen(repoPath)
+	assert.NilError(t, err)
+
+	head, err := r.Head()
+	assert.NilError(t, err)
+
+	assert.Assert(t, head.Hash() != plumbing.NewHash("7058b6b292ee3d1382670334b5f29570a1117ef1"))
+}
+
 // TODO
-// * One file changes
-// * Multiple files changed
-// * A file in a subdirectory changed
 // * The commit message is how we want it
