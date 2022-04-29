@@ -57,9 +57,3 @@ func autoSync(repoPath string) {
 
 	// write tests for all of this
 }
-
-// Commit Tests
-// 1. Empty Repo
-// 2. One file changes
-// 3. Multiple files changed
-// 4. A file in a subdirectory changed
