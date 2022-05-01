@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"os/exec"
 
-	"github.com/pkg/errors"
+	"github.com/ztrue/tracerr"
 )
 
 func commit(repoPath string) error {
@@ -18,12 +18,12 @@ func commit(repoPath string) error {
 
 	err, _, _ = GitCommand(repoPath, []string{"add", "--all"})
 	if err != nil {
-		return errors.Wrap(err, "Commit Failed")
+		return tracerr.Wrap(err)
 	}
 
 	err, _, _ = GitCommand(repoPath, []string{"commit", "-m", string(outb.Bytes())})
 	if err != nil {
-		return errors.Wrap(err, "Commit Failed")
+		return tracerr.Wrap(err)
 	}
 
 	return nil
@@ -38,5 +38,5 @@ func GitCommand(repoPath string, args []string) (error, bytes.Buffer, bytes.Buff
 	statusCmd.Stderr = &errb
 	err := statusCmd.Run()
 
-	return errors.Wrap(err, "Git Command Failed"), outb, errb
+	return tracerr.Wrap(err), outb, errb
 }
