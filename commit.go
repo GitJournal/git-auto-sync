@@ -21,7 +21,7 @@ func commit(repoPath string) error {
 		return tracerr.Wrap(err)
 	}
 
-	err, _, _ = GitCommand(repoPath, []string{"commit", "-m", string(outb.Bytes())})
+	err, _, _ = GitCommand(repoPath, []string{"commit", "-m", outb.String()})
 	if err != nil {
 		return tracerr.Wrap(err)
 	}

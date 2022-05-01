@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/ztrue/tracerr"
-	"gopkg.in/src-d/go-git.v4"
+	git "gopkg.in/src-d/go-git.v4"
 )
 
 func fetch(repoPath string) error {

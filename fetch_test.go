@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	cp "github.com/otiai10/copy"
-	"gopkg.in/src-d/go-git.v4"
+	git "gopkg.in/src-d/go-git.v4"
 	"gopkg.in/src-d/go-git.v4/plumbing"
 	"gotest.tools/v3/assert"
 )

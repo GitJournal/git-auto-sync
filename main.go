@@ -2,10 +2,9 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"time"
 
-	"gopkg.in/src-d/go-git.v4"
+	"github.com/ztrue/tracerr"
 )
 
 func main() {
@@ -24,36 +23,21 @@ func poll() {
 	fmt.Println("Poll")
 }
 
-func autoSync(repoPath string) {
-	r, err := git.PlainOpen(repoPath)
+func autoSync(repoPath string) error {
+	err := commit(repoPath)
 	if err != nil {
-		log.Fatal(err)
+		return tracerr.Wrap(err)
 	}
 
-	w, err := r.Worktree()
+	err = fetch(repoPath)
 	if err != nil {
-		log.Fatal(err)
+		return tracerr.Wrap(err)
 	}
 
-	err = w.AddGlob("*")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	status, err := w.Status()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	status.IsClean()
-
-	// commit everything
-
-	// do a fetch
 	// -> rebase if possible
 	// -> revert if rebase fails
 	// -> do a merge
 	// -> push the changes
 
-	// write tests for all of this
+	return nil
 }
