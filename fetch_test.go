@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -49,7 +48,6 @@ func FixFixtureGitConfig(t *testing.T, newRepoPath string, testDataPath string) 
 
 func Test_SimpleFetch(t *testing.T) {
 	repoPath := PrepareMultiFixtures(t, "simple_fetch", []string{"multiple_file_change"})
-	fmt.Println(repoPath)
 
 	err := fetch(repoPath)
 	assert.NilError(t, err)
