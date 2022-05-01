@@ -12,7 +12,7 @@ jobs:
     name: Test
     runs-on: ubuntu-22.04
     env:
-      CGO_ENABLED=0
+      CGO_ENABLED: 0
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
@@ -24,7 +24,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-22.04
     env:
-      CGO_ENABLED=0
+      CGO_ENABLED: 0
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
