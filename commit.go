@@ -16,14 +16,14 @@ func commit(repoPath string) error {
 		}
 	}
 
-	err, _, _ = GitCommand(repoPath, []string{"add", "--all"})
+	err, _, errB := GitCommand(repoPath, []string{"add", "--all"})
 	if err != nil {
-		return tracerr.Wrap(err)
+		return tracerr.Errorf("%w: %s", err, errB.String())
 	}
 
-	err, _, _ = GitCommand(repoPath, []string{"commit", "-m", outb.String()})
+	err, _, errB = GitCommand(repoPath, []string{"commit", "-m", outb.String()})
 	if err != nil {
-		return tracerr.Wrap(err)
+		return tracerr.Errorf("%w: %s", err, errB.String())
 	}
 
 	return nil
