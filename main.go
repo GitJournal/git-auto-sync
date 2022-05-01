@@ -19,26 +19,28 @@ func main() {
 	app := &cli.App{
 		Name:  "git-auto-sync",
 		Usage: "fight the loneliness!",
-		Action: func(ctx *cli.Context) error {
-			cwd, err := os.Getwd()
-			if err != nil {
-				return tracerr.Wrap(err)
-			}
-			fmt.Println(cwd)
-
-			err = autoSync(cwd)
-			if err != nil {
-				return tracerr.Wrap(err)
-			}
-			fmt.Println("Done")
-
-			return nil
-		},
 		Commands: []*cli.Command{
 			{
 				Name:   "watch",
-				Usage:  "watch a folder for changes",
+				Usage:  "Watch a folder for changes",
 				Action: watchForChanges,
+			},
+			{
+				Name:  "sync",
+				Usage: "Sync a repo right now",
+				Action: func(ctx *cli.Context) error {
+					cwd, err := os.Getwd()
+					if err != nil {
+						return tracerr.Wrap(err)
+					}
+
+					err = autoSync(cwd)
+					if err != nil {
+						return tracerr.Wrap(err)
+					}
+
+					return nil
+				},
 			},
 		},
 	}
