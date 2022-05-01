@@ -3,16 +3,12 @@ package main
 import (
 	"bytes"
 	"os/exec"
+
+	"github.com/pkg/errors"
 )
 
 func commit(repoPath string) error {
-	var outb, errb bytes.Buffer
-
-	statusCmd := exec.Command("git", "status", "--porcelain")
-	statusCmd.Dir = repoPath
-	statusCmd.Stdout = &outb
-	statusCmd.Stderr = &errb
-	err := statusCmd.Run()
+	err, outb, _ := GitCommand(repoPath, []string{"status", "--porcelain"})
 
 	if err == nil {
 		if len(outb.Bytes()) == 0 {
@@ -20,23 +16,27 @@ func commit(repoPath string) error {
 		}
 	}
 
-	addCmd := exec.Command("git", "add", "--all")
-	addCmd.Dir = repoPath
-	err = addCmd.Run()
+	err, _, _ = GitCommand(repoPath, []string{"add", "--all"})
 	if err != nil {
-		return err
+		return errors.Wrap(err, "Commit Failed")
 	}
 
-	commitCmd := exec.Command("git", "commit", "-m", string(outb.Bytes()))
-	commitCmd.Dir = repoPath
-	err = commitCmd.Run()
+	err, _, _ = GitCommand(repoPath, []string{"commit", "-m", string(outb.Bytes())})
 	if err != nil {
-		return err
+		return errors.Wrap(err, "Commit Failed")
 	}
 
 	return nil
 }
 
-// FIXME: Better errors
-//        * Add stacktraces
-//        * Wrap errors
+func GitCommand(repoPath string, args []string) (error, bytes.Buffer, bytes.Buffer) {
+	var outb, errb bytes.Buffer
+
+	statusCmd := exec.Command("git", args...)
+	statusCmd.Dir = repoPath
+	statusCmd.Stdout = &outb
+	statusCmd.Stderr = &errb
+	err := statusCmd.Run()
+
+	return errors.Wrap(err, "Git Command Failed"), outb, errb
+}

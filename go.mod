@@ -2,7 +2,10 @@ module github.com/GitJournal/git-auto-sync
 
 go 1.18
 
-require gopkg.in/src-d/go-git.v4 v4.13.1
+require (
+	github.com/pkg/errors v0.8.1
+	gopkg.in/src-d/go-git.v4 v4.13.1
+)
 
 require (
 	github.com/emirpasic/gods v1.12.0 // indirect
