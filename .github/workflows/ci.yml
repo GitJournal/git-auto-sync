@@ -14,13 +14,15 @@ jobs:
     env:
       CGO_ENABLED: 0
       EMAIL: test@example.com
-      GIT_AUTHOR_NAME: "GitHub CI"
-      GIT_COMMITTER_EMAIL: "GitHub CI"
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
         with:
           go-version: 1.18
+      - name: Setup Git Identity
+        run: |
+          git config --global user.email "test@example.com"
+          git config --global user.name "GitHub CI"
       - run: go test ./...
 
   lint:
