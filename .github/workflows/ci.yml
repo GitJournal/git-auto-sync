@@ -10,7 +10,7 @@ on:
 jobs:
   test:
     name: Test
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
     env:
       CGO_ENABLED: 0
     steps:
@@ -22,7 +22,7 @@ jobs:
 
   lint:
     name: Lint
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
     env:
       CGO_ENABLED: 0
     steps:
