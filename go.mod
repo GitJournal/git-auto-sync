@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/otiai10/copy v1.7.0
+	github.com/rjeczalik/notify v0.9.2
 	github.com/urfave/cli/v2 v2.5.1
 	github.com/ztrue/tracerr v0.3.0
 	gopkg.in/src-d/go-git.v4 v4.13.1
