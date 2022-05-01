@@ -13,6 +13,9 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       CGO_ENABLED: 0
+      EMAIL: test@example.com
+      GIT_AUTHOR_NAME: "GitHub CI"
+      GIT_COMMITTER_EMAIL: "GitHub CI"
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
