@@ -1,0 +1,8 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin1"]
+	url = file://$TESTDATA$/multiple_file_change/.git
+	fetch = +refs/heads/*:refs/remotes/origin1/*

@@ -13,7 +13,7 @@ import (
 	"gotest.tools/v3/assert"
 )
 
-func prepareFixture(t *testing.T, name string) string {
+func PrepareFixture(t *testing.T, name string) string {
 	newRepoPath, err := ioutil.TempDir(os.TempDir(), name)
 	assert.NilError(t, err)
 
@@ -28,7 +28,7 @@ func prepareFixture(t *testing.T, name string) string {
 }
 
 func Test_NoChanges(t *testing.T) {
-	repoPath := prepareFixture(t, "no_changes")
+	repoPath := PrepareFixture(t, "no_changes")
 
 	err := commit(repoPath)
 	assert.NilError(t, err)
@@ -43,7 +43,7 @@ func Test_NoChanges(t *testing.T) {
 }
 
 func Test_NewFile(t *testing.T) {
-	repoPath := prepareFixture(t, "new_file")
+	repoPath := PrepareFixture(t, "new_file")
 
 	err := commit(repoPath)
 	assert.NilError(t, err)
@@ -58,7 +58,7 @@ func Test_NewFile(t *testing.T) {
 }
 
 func Test_OneFileChange(t *testing.T) {
-	repoPath := prepareFixture(t, "one_file_change")
+	repoPath := PrepareFixture(t, "one_file_change")
 
 	err := commit(repoPath)
 	assert.NilError(t, err)
@@ -73,7 +73,7 @@ func Test_OneFileChange(t *testing.T) {
 }
 
 func Test_MultipleFileChange(t *testing.T) {
-	repoPath := prepareFixture(t, "multiple_file_change")
+	repoPath := PrepareFixture(t, "multiple_file_change")
 
 	err := commit(repoPath)
 	assert.NilError(t, err)
