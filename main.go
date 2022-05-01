@@ -110,8 +110,6 @@ func watchForChanges(ctx *cli.Context) error {
 		log.Println("Got event:", ei)
 		notifyFilteredChannel <- ei
 	}
-
-	return nil
 }
 
 // type Config struct {
