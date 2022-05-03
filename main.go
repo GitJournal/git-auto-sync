@@ -47,12 +47,7 @@ func main() {
 				Name:  "notify",
 				Usage: "Sync a repo right now",
 				Action: func(ctx *cli.Context) error {
-					err := beeep.Notify("Title", "Message body", "assets/information.png")
-					if err != nil {
-						panic(err)
-					}
-
-					err = beeep.Alert("Title", "Message body", "assets/warning.png")
+					err := beeep.Alert("Title", "Message body", "assets/warning.png")
 					if err != nil {
 						panic(err)
 					}
