@@ -20,17 +20,10 @@ func rebase(repoPath string) error {
 
 	rebaseErr, _ := GitCommand(repoPath, []string{"rebase", bi.UpstreamRemote + "/" + bi.UpstreamBranch})
 	if rebaseErr != nil {
-		ra, err := exists(path.Join(repoPath, ".git", "rebase-apply"))
+		rebaseInProgress, err := isRebasing(repoPath)
 		if err != nil {
 			return tracerr.Wrap(err)
 		}
-
-		rm, err := exists(path.Join(repoPath, ".git", "rebase-merge"))
-		if err != nil {
-			return tracerr.Wrap(err)
-		}
-
-		rebaseInProgress := ra || rm
 
 		var exerr *exec.ExitError
 		if errors.As(rebaseErr, &exerr) && exerr.ExitCode() == 1 && rebaseInProgress {
@@ -97,4 +90,18 @@ func fetchBranchInfo(repoPath string) (branchInfo, error) {
 		UpstreamRemote: branchConfig.Remote,
 		UpstreamBranch: branchConfig.Merge.Short(),
 	}, nil
+}
+
+func isRebasing(repoPath string) (bool, error) {
+	ra, err := exists(path.Join(repoPath, ".git", "rebase-apply"))
+	if err != nil {
+		return false, tracerr.Wrap(err)
+	}
+
+	rm, err := exists(path.Join(repoPath, ".git", "rebase-merge"))
+	if err != nil {
+		return false, tracerr.Wrap(err)
+	}
+
+	return ra || rm, nil
 }
