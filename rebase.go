@@ -11,6 +11,8 @@ import (
 	"gopkg.in/src-d/go-git.v4/plumbing"
 )
 
+var errRebaseFailed = errors.New("git rebase failed")
+
 func rebase(repoPath string) error {
 	bi, err := fetchBranchInfo(repoPath)
 	if err != nil {
@@ -30,7 +32,7 @@ func rebase(repoPath string) error {
 			if err != nil {
 				return tracerr.Wrap(err)
 			}
-			return nil
+			return errRebaseFailed
 		}
 		return tracerr.Wrap(err)
 	}

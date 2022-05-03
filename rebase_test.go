@@ -85,7 +85,7 @@ func Test_RebaseBothCommitsConflict(t *testing.T) {
 	assert.NilError(t, err)
 
 	err = rebase(repoPath)
-	assert.NilError(t, err)
+	assert.Equal(t, err, errRebaseFailed)
 
 	newHead, err := r.Head()
 	assert.NilError(t, err)
