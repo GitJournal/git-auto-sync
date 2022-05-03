@@ -27,12 +27,12 @@ func main() {
 				Name:  "sync",
 				Usage: "Sync a repo right now",
 				Action: func(ctx *cli.Context) error {
-					cwd, err := os.Getwd()
+					repoPath, err := os.Getwd()
 					if err != nil {
 						return tracerr.Wrap(err)
 					}
 
-					err = autoSync(cwd)
+					err = autoSync(repoPath)
 					if err != nil {
 						return tracerr.Wrap(err)
 					}
@@ -62,9 +62,14 @@ func main() {
 }
 
 func watchForChanges(ctx *cli.Context) error {
+	repoPath, err := os.Getwd()
+	if err != nil {
+		return tracerr.Wrap(err)
+	}
+
 	notifyChannel := make(chan notify.EventInfo, 100)
 
-	err := notify.Watch("./...", notifyChannel, notify.Write, notify.Rename, notify.Remove)
+	err = notify.Watch("./...", notifyChannel, notify.Write, notify.Rename, notify.Remove)
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
@@ -94,7 +99,11 @@ func watchForChanges(ctx *cli.Context) error {
 	// Block until an event is received.
 	for {
 		ei := <-notifyChannel
-		if shouldIgnoreFile(ei.Path()) {
+		ignore, err := shouldIgnoreFile(repoPath, ei.Path())
+		if err != nil {
+			return tracerr.Wrap(err)
+		}
+		if ignore {
 			continue
 		}
 

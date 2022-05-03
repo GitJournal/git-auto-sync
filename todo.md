@@ -14,8 +14,6 @@
   https://groups.google.com/g/golang-nuts/c/bcjk9ncP5ac
 
 
-1. Ignore files which .gitignore ignores
-
 Commands -
 * watch <repo>
   - Allow configuration to be changed
