@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"os"
 	"os/exec"
 	"path"
@@ -44,10 +43,8 @@ func rebase(repoPath string) error {
 // fixme: Return a proper error if a rebase fails!
 
 func exists(name string) (bool, error) {
-	fmt.Println(name)
 	_, err := os.Stat(name)
 	if err == nil {
-		fmt.Println("YES")
 		return true, nil
 	}
 	if errors.Is(err, os.ErrNotExist) {
