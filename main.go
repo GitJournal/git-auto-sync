@@ -120,7 +120,13 @@ func watchForChanges(ctx *cli.Context) error {
 // }
 
 func autoSync(repoPath string) error {
-	err := commit(repoPath)
+	var err error
+	err = ensureGitAuthor(repoPath)
+	if err != nil {
+		return tracerr.Wrap(err)
+	}
+
+	err = commit(repoPath)
 	if err != nil {
 		return tracerr.Wrap(err)
 	}

@@ -6,15 +6,9 @@
   - https://github.com/kardianos/service
 
 - Add a merge option
-- Push the changes
 
 - Use
   - https://goreleaser.com/intro/
-
-- Add a 'watch' command
-
-- Make sure the author / email is set!
-  - Check via git config user.email & user.name
 
 - https://stackoverflow.com/questions/21705950/running-external-commands-through-os-exec-under-another-user
   https://groups.google.com/g/golang-nuts/c/bcjk9ncP5ac
