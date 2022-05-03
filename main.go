@@ -4,14 +4,11 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
 	"time"
 
 	"github.com/gen2brain/beeep"
 	cli "github.com/urfave/cli/v2"
 	"github.com/ztrue/tracerr"
-
-	"path/filepath"
 
 	"github.com/rjeczalik/notify"
 )
@@ -152,15 +149,4 @@ func autoSync(repoPath string) error {
 	// -> push the changes
 
 	return nil
-}
-
-func shouldIgnoreFile(path string) bool {
-	fileName := filepath.Base(path)
-	return strings.HasSuffix(fileName, ".swp") || // vim
-		strings.HasPrefix(path, "~") || // emacs
-		strings.HasSuffix(path, "~") || // kate
-		strings.HasPrefix(path, ".") // hidden files
-
-	// Do not automatically ignore all hidden files, make this configurable
-	// Also check if ignored by .gitignore
 }
