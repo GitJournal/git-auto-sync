@@ -130,6 +130,16 @@ func autoSync(repoPath string) error {
 		return tracerr.Wrap(err)
 	}
 
+	err = rebase(repoPath)
+	if err != nil {
+		return tracerr.Wrap(err)
+	}
+
+	err = push(repoPath)
+	if err != nil {
+		return tracerr.Wrap(err)
+	}
+
 	// -> rebase if possible
 	// -> revert if rebase fails
 	// -> do a merge
