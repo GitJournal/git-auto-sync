@@ -13,32 +13,12 @@ import (
 )
 
 func rebase(repoPath string) error {
-	repo, err := git.PlainOpen(repoPath)
+	bi, err := fetchBranchInfo(repoPath)
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
 
-	config, err := repo.Config()
-	if err != nil {
-		return tracerr.Wrap(err)
-	}
-
-	ref, err := repo.Reference(plumbing.HEAD, false)
-	if err != nil {
-		return tracerr.Wrap(err)
-	}
-
-	currentBranchName := ref.Target().Short()
-	branchConfig := config.Branches[currentBranchName]
-	if branchConfig == nil {
-		// No tracking branch, nothing to do
-		return nil
-	}
-
-	remoteName := branchConfig.Remote
-	remoteBranchName := branchConfig.Merge.Short()
-
-	rebaseErr, _ := GitCommand(repoPath, []string{"rebase", remoteName + "/" + remoteBranchName})
+	rebaseErr, _ := GitCommand(repoPath, []string{"rebase", bi.UpstreamRemote + "/" + bi.UpstreamBranch})
 	if rebaseErr != nil {
 		ra, err := exists(path.Join(repoPath, ".git", "rebase-apply"))
 		if err != nil {
@@ -81,4 +61,40 @@ func exists(name string) (bool, error) {
 		return false, nil
 	}
 	return false, err
+}
+
+type branchInfo struct {
+	CurrentBranch  string
+	UpstreamRemote string
+	UpstreamBranch string
+}
+
+func fetchBranchInfo(repoPath string) (branchInfo, error) {
+	repo, err := git.PlainOpen(repoPath)
+	if err != nil {
+		return branchInfo{}, tracerr.Wrap(err)
+	}
+
+	config, err := repo.Config()
+	if err != nil {
+		return branchInfo{}, tracerr.Wrap(err)
+	}
+
+	ref, err := repo.Reference(plumbing.HEAD, false)
+	if err != nil {
+		return branchInfo{}, tracerr.Wrap(err)
+	}
+
+	currentBranchName := ref.Target().Short()
+	branchConfig := config.Branches[currentBranchName]
+	if branchConfig == nil {
+		// No tracking branch, nothing to do
+		return branchInfo{CurrentBranch: currentBranchName}, nil
+	}
+
+	return branchInfo{
+		CurrentBranch:  currentBranchName,
+		UpstreamRemote: branchConfig.Remote,
+		UpstreamBranch: branchConfig.Merge.Short(),
+	}, nil
 }
