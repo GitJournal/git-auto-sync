@@ -10,22 +10,21 @@ import (
 	"github.com/ztrue/tracerr"
 )
 
-// FIXME: Poll for changes as well?
 // FIXME: Watch for suspend / resume
+// FIXME: Properly log the errors
 
 func WatchForChanges(repoPath string) error {
 	var err error
-	notifyChannel := make(chan notify.EventInfo, 100)
 
-	err = notify.Watch(filepath.Join(repoPath, "..."), notifyChannel, notify.Write, notify.Rename, notify.Remove)
+	err = AutoSync(repoPath)
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
-	defer notify.Stop(notifyChannel)
 
 	notifyFilteredChannel := make(chan notify.EventInfo, 100)
 	ticker := time.NewTicker(20 * time.Second)
 
+	// Filtered events
 	go func() {
 		var events []notify.EventInfo
 		for {
@@ -34,17 +33,31 @@ func WatchForChanges(repoPath string) error {
 				events = append(events, ei)
 				continue
 
-			case t := <-ticker.C:
-				fmt.Println("Tick at", t)
+			case <-ticker.C:
 				if len(events) != 0 {
-					fmt.Println("Committing")
 					events = []notify.EventInfo{}
+
+					fmt.Println("Committing")
+					err := AutoSync(repoPath)
+					if err != nil {
+						log.Fatalln(err)
+					}
 				}
 			}
 		}
 	}()
 
-	// Block until an event is received.
+	//
+	// Watch for FS events
+	//
+	notifyChannel := make(chan notify.EventInfo, 100)
+
+	err = notify.Watch(filepath.Join(repoPath, "..."), notifyChannel, notify.Write, notify.Rename, notify.Remove, notify.Create)
+	if err != nil {
+		return tracerr.Wrap(err)
+	}
+	defer notify.Stop(notifyChannel)
+
 	for {
 		ei := <-notifyChannel
 		ignore, err := shouldIgnoreFile(repoPath, ei.Path())
@@ -55,8 +68,6 @@ func WatchForChanges(repoPath string) error {
 			continue
 		}
 
-		// Wait for 'x' seconds
-		log.Println("Got event:", ei)
 		notifyFilteredChannel <- ei
 	}
 }

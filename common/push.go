@@ -14,7 +14,7 @@ func push(repoPath string) error {
 		return nil
 	}
 
-	err, _ = GitCommand(repoPath, []string{"push", bi.UpstreamRemote + "/" + bi.UpstreamBranch})
+	err, _ = GitCommand(repoPath, []string{"push", bi.UpstreamRemote, bi.UpstreamBranch})
 	if err != nil {
 		return tracerr.Wrap(err)
 	}

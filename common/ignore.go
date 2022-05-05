@@ -1,6 +1,7 @@
 package common
 
 import (
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -9,20 +10,33 @@ import (
 	"gopkg.in/src-d/go-git.v4/plumbing/format/gitignore"
 )
 
-func shouldIgnoreFile(repoPath string, path string) (bool, error) {
-	fileName := filepath.Base(path)
+func shouldIgnoreFile(repoPath string, fullFilePath string) (bool, error) {
+	fileName := filepath.Base(fullFilePath)
 	var isTempFile = strings.HasSuffix(fileName, ".swp") || // vim
-		strings.HasPrefix(path, "~") || // emacs
-		strings.HasSuffix(path, "~") || // kate
-		strings.HasPrefix(path, ".") // hidden files
+		strings.HasPrefix(fileName, "~") || // emacs
+		strings.HasSuffix(fileName, "~") || // kate
+		strings.HasPrefix(fileName, ".") // hidden files
+
+	// FIXME: Do not automatically ignore all hidden files, make this configurable
 
 	if isTempFile {
 		return true, nil
 	}
 
-	// FIXME: Do not automatically ignore all hidden files, make this configurable
+	relativePath := fullFilePath[len(repoPath)+1:]
+	if strings.HasPrefix(relativePath, ".git/") {
+		return true, nil
+	}
 
-	return isFileIgnoredByGit(repoPath, path)
+	empty, err := isEmptyFile(fullFilePath)
+	if err != nil {
+		return false, tracerr.Wrap(err)
+	}
+	if empty {
+		return true, nil
+	}
+
+	return isFileIgnoredByGit(repoPath, fullFilePath)
 }
 
 func isFileIgnoredByGit(repoPath string, filePath string) (bool, error) {
@@ -45,4 +59,17 @@ func isFileIgnoredByGit(repoPath string, filePath string) (bool, error) {
 	m := gitignore.NewMatcher(patterns)
 
 	return m.Match([]string{filePath}, false), err
+}
+
+func isEmptyFile(filePath string) (bool, error) {
+	stat, err := os.Stat(filePath)
+
+	if err != nil {
+		if os.IsNotExist(err) {
+			return false, nil
+		}
+		return false, err
+	}
+
+	return stat.Size() == 0, nil
 }

@@ -1,6 +1,8 @@
 package common
 
-import "github.com/ztrue/tracerr"
+import (
+	"github.com/ztrue/tracerr"
+)
 
 func AutoSync(repoPath string) error {
 	var err error
