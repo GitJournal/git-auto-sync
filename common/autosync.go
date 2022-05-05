@@ -1,6 +1,9 @@
 package common
 
 import (
+	"errors"
+
+	"github.com/gen2brain/beeep"
 	"github.com/ztrue/tracerr"
 )
 
@@ -23,6 +26,15 @@ func AutoSync(repoPath string) error {
 
 	err = rebase(repoPath)
 	if err != nil {
+		if errors.Is(err, errRebaseFailed) {
+			err := beeep.Alert("Git Auto Sync - Conflict", "Could not rebase for - "+repoPath, "assets/warning.png")
+			if err != nil {
+				return tracerr.Wrap(err)
+			}
+		}
+		// How should we continue?
+		// - Keep sending the notification each time?
+		// - Or something a bit better?
 		return tracerr.Wrap(err)
 	}
 
@@ -31,8 +43,6 @@ func AutoSync(repoPath string) error {
 		return tracerr.Wrap(err)
 	}
 
-	// -> rebase if possible
-	// -> revert if rebase fails
 	// -> do a merge
 	// -> push the changes
 

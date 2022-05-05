@@ -28,3 +28,4 @@ Commands -
 
 * Daemon + enable / disable
 * Handle rebase / merge / merge-conflict (commit everything, pick newest, notify)
+* Daemon - proper logs

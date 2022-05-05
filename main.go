@@ -4,7 +4,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/gen2brain/beeep"
 	cli "github.com/urfave/cli/v2"
 	"github.com/ztrue/tracerr"
 
@@ -14,7 +13,7 @@ import (
 func main() {
 	app := &cli.App{
 		Name:  "git-auto-sync",
-		Usage: "fight the loneliness!",
+		Usage: "Automatically Sync any Git Repo",
 		Commands: []*cli.Command{
 			{
 				Name:  "watch",
@@ -40,18 +39,6 @@ func main() {
 					err = common.AutoSync(repoPath)
 					if err != nil {
 						return tracerr.Wrap(err)
-					}
-
-					return nil
-				},
-			},
-			{
-				Name:  "notify",
-				Usage: "Sync a repo right now",
-				Action: func(ctx *cli.Context) error {
-					err := beeep.Alert("Title", "Message body", "assets/warning.png")
-					if err != nil {
-						panic(err)
 					}
 
 					return nil
