@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/GitJournal/git-auto-sync/common"
 	cli "github.com/urfave/cli/v2"
 	"github.com/ztrue/tracerr"
 	git "gopkg.in/src-d/go-git.v4"
@@ -19,7 +20,7 @@ func daemonStatus(ctx *cli.Context) error {
 }
 
 func daemonList(ctx *cli.Context) error {
-	config, err := ReadConfig()
+	config, err := common.ReadConfig()
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
@@ -46,13 +47,13 @@ func daemonAdd(ctx *cli.Context) error {
 		return tracerr.Wrap(err)
 	}
 
-	config, err := ReadConfig()
+	config, err := common.ReadConfig()
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
 
 	config.Repos = append(config.Repos, repoPath)
-	err = WriteConfig(config)
+	err = common.WriteConfig(config)
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
@@ -89,7 +90,7 @@ func daemonRm(ctx *cli.Context) error {
 		repoPath = filepath.Join(cwd, repoPath)
 	}
 
-	config, err := ReadConfig()
+	config, err := common.ReadConfig()
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
@@ -108,7 +109,7 @@ func daemonRm(ctx *cli.Context) error {
 	}
 
 	config.Repos = remove(config.Repos, pos)
-	err = WriteConfig(config)
+	err = common.WriteConfig(config)
 	if err != nil {
 		return tracerr.Wrap(err)
 	}

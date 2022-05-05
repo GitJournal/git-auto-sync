@@ -1,8 +1,8 @@
-package main
+package common
 
 import "github.com/ztrue/tracerr"
 
-func autoSync(repoPath string) error {
+func AutoSync(repoPath string) error {
 	var err error
 	err = ensureGitAuthor(repoPath)
 	if err != nil {

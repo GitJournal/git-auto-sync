@@ -7,6 +7,8 @@ import (
 	"github.com/gen2brain/beeep"
 	cli "github.com/urfave/cli/v2"
 	"github.com/ztrue/tracerr"
+
+	"github.com/GitJournal/git-auto-sync/common"
 )
 
 func main() {
@@ -23,7 +25,7 @@ func main() {
 						return tracerr.Wrap(err)
 					}
 
-					return WatchForChanges(repoPath)
+					return common.WatchForChanges(repoPath)
 				},
 			},
 			{
@@ -35,7 +37,7 @@ func main() {
 						return tracerr.Wrap(err)
 					}
 
-					err = autoSync(repoPath)
+					err = common.AutoSync(repoPath)
 					if err != nil {
 						return tracerr.Wrap(err)
 					}
