@@ -19,7 +19,7 @@ func daemonStatus(ctx *cli.Context) error {
 }
 
 func daemonList(ctx *cli.Context) error {
-	config, err := readConfig()
+	config, err := ReadConfig()
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
@@ -46,13 +46,13 @@ func daemonAdd(ctx *cli.Context) error {
 		return tracerr.Wrap(err)
 	}
 
-	config, err := readConfig()
+	config, err := ReadConfig()
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
 
 	config.Repos = append(config.Repos, repoPath)
-	err = writeConfig(config)
+	err = WriteConfig(config)
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
@@ -89,7 +89,7 @@ func daemonRm(ctx *cli.Context) error {
 		repoPath = filepath.Join(cwd, repoPath)
 	}
 
-	config, err := readConfig()
+	config, err := ReadConfig()
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
@@ -108,7 +108,7 @@ func daemonRm(ctx *cli.Context) error {
 	}
 
 	config.Repos = remove(config.Repos, pos)
-	err = writeConfig(config)
+	err = WriteConfig(config)
 	if err != nil {
 		return tracerr.Wrap(err)
 	}

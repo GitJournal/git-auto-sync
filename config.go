@@ -13,7 +13,7 @@ type Config struct {
 	Repos []string `json:"repos"`
 }
 
-func readConfig() (*Config, error) {
+func ReadConfig() (*Config, error) {
 	configPath := configdir.LocalConfig("git-auto-sync")
 	err := configdir.MakePath(configPath)
 	if err != nil {
@@ -43,7 +43,7 @@ func readConfig() (*Config, error) {
 	return &config, nil
 }
 
-func writeConfig(config *Config) error {
+func WriteConfig(config *Config) error {
 	configPath := configdir.LocalConfig("git-auto-sync")
 	err := configdir.MakePath(configPath)
 	if err != nil {
