@@ -1,4 +1,4 @@
-- Add the logs of operation to .git/auto-sync
+- Add the logs of operation to .git/logs/auto-sync
 
 - Make this a daemon that just auto-commits for now
   - Get the config from /etc/git-auto-sync
@@ -13,21 +13,18 @@
 - https://stackoverflow.com/questions/21705950/running-external-commands-through-os-exec-under-another-user
   https://groups.google.com/g/golang-nuts/c/bcjk9ncP5ac
 
-
 Commands -
 * watch <repo>
   - Allow configuration to be changed
   - Passed via command line args
 * sync
+* test <repo>
+  - Tests for write-access to the repo
 
-* enable
-* disable
-* status
 * daemon - Run it in the background
-
-* watch add/ls/rm
-  -
+  - add/ls/rm
 
 ## First Release
+
 * Daemon + enable / disable
 * Handle rebase / merge / merge-conflict (commit everything, pick newest, notify)
