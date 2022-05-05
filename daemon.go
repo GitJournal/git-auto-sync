@@ -72,7 +72,7 @@ func isValidGitRepo(repoPath string) error {
 
 	_, err = git.PlainOpen(repoPath)
 	if err != nil {
-		return tracerr.Errorf("%w - %s\n%w", errRepoPathInvalid, repoPath, err)
+		return tracerr.Errorf("Not a valid git repo - %s\n%w", repoPath, err)
 	}
 
 	return nil
