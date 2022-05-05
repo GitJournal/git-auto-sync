@@ -40,10 +40,6 @@ func rebase(repoPath string) error {
 	return nil
 }
 
-// fixme: See if the exit code is 1 when a rebase can fail?
-//        how else can a rebase fail?
-// fixme: Return a proper error if a rebase fails!
-
 func exists(name string) (bool, error) {
 	_, err := os.Stat(name)
 	if err == nil {

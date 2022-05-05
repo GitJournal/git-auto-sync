@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/gen2brain/beeep v0.0.0-20220402123239-6a3042f4b71a
+	github.com/kirsle/configdir v0.0.0-20170128060238-e45d2f54772f
 	github.com/otiai10/copy v1.7.0
 	github.com/rjeczalik/notify v0.9.2
 	github.com/urfave/cli/v2 v2.5.1

@@ -52,6 +52,35 @@ func main() {
 					return nil
 				},
 			},
+			{
+				Name:  "daemon",
+				Usage: "Interact with the background daemon",
+				Subcommands: []*cli.Command{
+					{
+						Name:   "status",
+						Usage:  "Show the Daemon's status",
+						Action: daemonStatus,
+					},
+					{
+						Name:    "list",
+						Aliases: []string{"ls"},
+						Usage:   "List of repos being auto-synced",
+						Action:  daemonList,
+					},
+					{
+						Name:   "add",
+						Usage:  "Add a repo for auto-sync",
+						Action: daemonAdd,
+					},
+
+					{
+						Name:    "remove",
+						Aliases: []string{"rm"},
+						Usage:   "Remove a repo from auto-sync",
+						Action:  daemonRm,
+					},
+				},
+			},
 		},
 	}
 
@@ -112,14 +141,6 @@ func watchForChanges(ctx *cli.Context) error {
 		notifyFilteredChannel <- ei
 	}
 }
-
-// type Config struct {
-// 	repoPath     string
-// 	pollInterval time.Duration
-// }
-
-// what remotes?
-// what branches?
 
 // func poll() {
 // 	fmt.Println("Poll")
