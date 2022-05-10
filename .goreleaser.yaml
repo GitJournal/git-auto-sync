@@ -5,27 +5,12 @@ before:
     - go mod tidy
     - go generate ./...
 builds:
-  - binary: git-auto-sync
-    id: git-auto-sync
-    env:
+  - env:
       - CGO_ENABLED=0
     goos:
       - linux
       - windows
-    goarch:
-      - amd64
-      - arm
-      - arm64
-
-  # Macos build needs to be built on macos
-  # https://github.com/rjeczalik/notify/issues/177
-  - binary: git-auto-sync
-    id: git-auto-sync-macos
-    goos:
       - darwin
-    goarch:
-      - amd64
-
 archives:
   - replacements:
       darwin: Darwin
