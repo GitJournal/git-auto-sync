@@ -13,12 +13,6 @@ import (
 var version = "dev"
 
 func main() {
-	cli.VersionFlag = &cli.BoolFlag{
-		Name:    "version",
-		Aliases: []string{"V"},
-		Usage:   "Print only the version",
-	}
-
 	app := &cli.App{
 		Name:                 "git-auto-sync",
 		Version:              version,
