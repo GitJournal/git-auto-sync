@@ -58,7 +58,7 @@ brews:
     owner: GitJournal
     name: homebrew-tap
     token: "{{ .Env.TAP_GITHUB_TOKEN }}"
-    install: |
-        bin.install "git-auto-sync"
-        bash_completion.install "completions/bash_autocomplete"
-        zsh_completion.install "completions/zsh_autocomplete"
+  install: |
+    bin.install "git-auto-sync"
+    bash_completion.install "completions/bash_autocomplete"
+    zsh_completion.install "completions/zsh_autocomplete"
