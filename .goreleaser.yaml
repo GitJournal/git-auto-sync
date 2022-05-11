@@ -52,3 +52,4 @@ brews:
   tap:
     owner: GitJournal
     name: homebrew-tap
+    token: "{{ .Env.TAP_GITHUB_TOKEN }}"
