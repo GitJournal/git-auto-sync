@@ -47,7 +47,7 @@ changelog:
       - '^docs:'
       - '^test:'
 brews:
-- name: GitAutoSync
+- name: git-auto-sync
   homepage: https://github.com/GitJournal/homebrew-tap
   tap:
     owner: GitJournal
