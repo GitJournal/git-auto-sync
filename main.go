@@ -10,9 +10,18 @@ import (
 	"github.com/GitJournal/git-auto-sync/common"
 )
 
+var version = "dev"
+
 func main() {
+	cli.VersionFlag = &cli.BoolFlag{
+		Name:    "version",
+		Aliases: []string{"V"},
+		Usage:   "Print only the version",
+	}
+
 	app := &cli.App{
 		Name:                 "git-auto-sync",
+		Version:              version,
 		Usage:                "Automatically Sync any Git Repo",
 		EnableBashCompletion: true,
 		Commands: []*cli.Command{

@@ -34,4 +34,3 @@ Commands -
 * Allow running the 'sync' command from a non top level directory
 
 * Add a merge strategy where it doesn't take the YAML header changes into account
-* Add a version common
