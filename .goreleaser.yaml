@@ -46,3 +46,9 @@ changelog:
     exclude:
       - '^docs:'
       - '^test:'
+brews:
+- name: GitAutoSync
+  homepage: https://github.com/GitJournal/homebrew-tap
+  tap:
+    owner: GitJournal
+    name: homebrew-tap
