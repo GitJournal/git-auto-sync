@@ -1,3 +1,6 @@
+PROG=git-auto-sync
+_CLI_ZSH_AUTOCOMPLETE_HACK=1
+
 #compdef $PROG
 
 _cli_zsh_autocomplete() {

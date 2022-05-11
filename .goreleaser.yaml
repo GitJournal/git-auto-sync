@@ -36,6 +36,11 @@ archives:
       windows: Windows
       386: i386
       amd64: x86_64
+    files:
+      - LICENSE
+      - README.md
+      - completions/bash_autocomplete
+      - completions/zsh_autocomplete
 checksum:
   name_template: 'checksums.txt'
 snapshot:
@@ -53,3 +58,7 @@ brews:
     owner: GitJournal
     name: homebrew-tap
     token: "{{ .Env.TAP_GITHUB_TOKEN }}"
+    install: |
+        bin.install "git-auto-sync"
+        bash_completion.install "completions/bash_autocomplete"
+        zsh_completion.install "completions/zsh_autocomplete"

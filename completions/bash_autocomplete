@@ -1,6 +1,6 @@
 #! /bin/bash
 
-: ${PROG:=$(basename ${BASH_SOURCE})}
+PROG=git-auto-sync
 
 _cli_bash_autocomplete() {
   if [[ "${COMP_WORDS[0]}" != "source" ]]; then

@@ -12,8 +12,9 @@ import (
 
 func main() {
 	app := &cli.App{
-		Name:  "git-auto-sync",
-		Usage: "Automatically Sync any Git Repo",
+		Name:                 "git-auto-sync",
+		Usage:                "Automatically Sync any Git Repo",
+		EnableBashCompletion: true,
 		Commands: []*cli.Command{
 			{
 				Name:  "watch",
