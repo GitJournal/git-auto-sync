@@ -16,6 +16,16 @@ type Service struct {
 	service service.Service
 }
 
+type emptyDaemon struct{}
+
+func (d *emptyDaemon) Start(s service.Service) error {
+	return nil
+}
+
+func (d *emptyDaemon) Stop(s service.Service) error {
+	return nil
+}
+
 func NewService() (Service, error) {
 	user, err := user.Current()
 	if err != nil {
@@ -47,7 +57,7 @@ func NewService() (Service, error) {
 		Option: options,
 	}
 
-	daemon := &Daemon{}
+	daemon := &emptyDaemon{}
 	s, err := service.New(daemon, svcConfig)
 	if err != nil {
 		return Service{}, tracerr.Wrap(err)
