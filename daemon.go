@@ -40,6 +40,7 @@ func daemonAdd(ctx *cli.Context) error {
 		}
 
 		repoPath = filepath.Join(cwd, repoPath)
+		// TODO: Check if the parent/ancestor is the repoPath!
 	}
 
 	err := isValidGitRepo(repoPath)
@@ -52,8 +53,29 @@ func daemonAdd(ctx *cli.Context) error {
 		return tracerr.Wrap(err)
 	}
 
-	config.Repos = append(config.Repos, repoPath)
+	contains := false
+	for _, rp := range config.Repos {
+		if rp == repoPath {
+			contains = true
+			break
+		}
+	}
+
+	if !contains {
+		config.Repos = append(config.Repos, repoPath)
+	}
+
 	err = common.WriteConfig(config)
+	if err != nil {
+		return tracerr.Wrap(err)
+	}
+
+	s, err := common.NewService()
+	if err != nil {
+		return tracerr.Wrap(err)
+	}
+
+	err = s.Enable()
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
@@ -113,6 +135,8 @@ func daemonRm(ctx *cli.Context) error {
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
+
+	// TODO: Disable if it is running and Repos is empty
 
 	return nil
 }
