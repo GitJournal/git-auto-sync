@@ -19,7 +19,7 @@ func rebase(repoPath string) error {
 		return tracerr.Wrap(err)
 	}
 
-	rebaseErr, _ := GitCommand(repoPath, []string{"rebase", bi.UpstreamRemote + "/" + bi.UpstreamBranch})
+	_, rebaseErr := GitCommand(repoPath, []string{"rebase", bi.UpstreamRemote + "/" + bi.UpstreamBranch})
 	if rebaseErr != nil {
 		rebaseInProgress, err := isRebasing(repoPath)
 		if err != nil {
@@ -28,7 +28,7 @@ func rebase(repoPath string) error {
 
 		var exerr *exec.ExitError
 		if errors.As(rebaseErr, &exerr) && exerr.ExitCode() == 1 && rebaseInProgress {
-			err, _ := GitCommand(repoPath, []string{"rebase", "--abort"})
+			_, err := GitCommand(repoPath, []string{"rebase", "--abort"})
 			if err != nil {
 				return tracerr.Wrap(err)
 			}

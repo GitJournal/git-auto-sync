@@ -19,7 +19,7 @@ func fetch(repoPath string) error {
 	for _, remote := range remotes {
 		remoteName := remote.Config().Name
 
-		err, _ := GitCommand(repoPath, []string{"fetch", remoteName})
+		_, err := GitCommand(repoPath, []string{"fetch", remoteName})
 		if err != nil {
 			return tracerr.Wrap(err)
 		}
