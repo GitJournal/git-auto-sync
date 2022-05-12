@@ -58,7 +58,7 @@ type branchInfo struct {
 }
 
 func fetchBranchInfo(repoPath string) (branchInfo, error) {
-	repo, err := git.PlainOpen(repoPath)
+	repo, err := git.PlainOpenWithOptions(repoPath, &git.PlainOpenOptions{DetectDotGit: true})
 	if err != nil {
 		return branchInfo{}, tracerr.Wrap(err)
 	}

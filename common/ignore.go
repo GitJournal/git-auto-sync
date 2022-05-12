@@ -40,7 +40,7 @@ func shouldIgnoreFile(repoPath string, fullFilePath string) (bool, error) {
 }
 
 func isFileIgnoredByGit(repoPath string, filePath string) (bool, error) {
-	repo, err := git.PlainOpen(repoPath)
+	repo, err := git.PlainOpenWithOptions(repoPath, &git.PlainOpenOptions{DetectDotGit: true})
 	if err != nil {
 		return false, tracerr.Wrap(err)
 	}

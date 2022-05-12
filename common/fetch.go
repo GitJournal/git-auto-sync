@@ -6,7 +6,7 @@ import (
 )
 
 func fetch(repoPath string) error {
-	r, err := git.PlainOpen(repoPath)
+	r, err := git.PlainOpenWithOptions(repoPath, &git.PlainOpenOptions{DetectDotGit: true})
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
