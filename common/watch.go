@@ -12,6 +12,7 @@ import (
 
 // FIXME: Watch for suspend / resume
 // FIXME: Properly log the errors
+// FIXME: Properly log each time this performs a sync
 
 func WatchForChanges(repoPath string) error {
 	var err error

@@ -13,20 +13,20 @@ import (
 )
 
 type Service struct {
-	service service.Service
+	Service service.Service
 }
 
 type emptyDaemon struct{}
 
-func (d *emptyDaemon) Start(s service.Service) error {
+func (d emptyDaemon) Start(s service.Service) error {
 	return nil
 }
 
-func (d *emptyDaemon) Stop(s service.Service) error {
+func (d emptyDaemon) Stop(s service.Service) error {
 	return nil
 }
 
-func NewService() (Service, error) {
+func NewServiceWithDaemon(daemon service.Interface) (Service, error) {
 	user, err := user.Current()
 	if err != nil {
 		log.Fatalf(err.Error())
@@ -57,20 +57,23 @@ func NewService() (Service, error) {
 		Option: options,
 	}
 
-	daemon := &emptyDaemon{}
 	s, err := service.New(daemon, svcConfig)
 	if err != nil {
 		return Service{}, tracerr.Wrap(err)
 	}
 
-	return Service{service: s}, nil
+	return Service{Service: s}, nil
+}
+
+func NewService() (Service, error) {
+	return NewServiceWithDaemon(emptyDaemon{})
 }
 
 func (srv Service) Enable() error {
 	// TODO: Uninstall the old one, in case it was running
 	//       Also stop the old service?
 
-	err := srv.service.Install()
+	err := srv.Service.Install()
 	fmt.Println("Installed")
 	if err != nil {
 		if strings.Contains(err.Error(), "Init already exists") {
@@ -79,7 +82,7 @@ func (srv Service) Enable() error {
 		return tracerr.Wrap(err)
 	}
 
-	err = srv.service.Restart()
+	err = srv.Service.Restart()
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
@@ -88,7 +91,7 @@ func (srv Service) Enable() error {
 }
 
 func (srv Service) Disable() error {
-	err := srv.service.Uninstall()
+	err := srv.Service.Uninstall()
 	if err != nil {
 		return tracerr.Wrap(err)
 	}

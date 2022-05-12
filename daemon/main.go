@@ -5,8 +5,6 @@ import (
 	"log"
 	"sync"
 
-	"os/user"
-
 	"github.com/GitJournal/git-auto-sync/common"
 	"github.com/kardianos/service"
 )
@@ -44,42 +42,18 @@ func (d *Daemon) Stop(s service.Service) error {
 }
 
 func main() {
-	user, err := user.Current()
-	if err != nil {
-		log.Fatalf(err.Error())
-	}
-
-	options := make(service.KeyValue)
-	options["Restart"] = "on-success"
-	options["UserService"] = true
-	options["RunAtLoad"] = true
-
-	svcConfig := &service.Config{
-		Name:        "GitAutoSyncDaemon",
-		DisplayName: "Git Auto Sync Daemon",
-		Description: "Background Process for Auto Syncing Git Repos",
-		UserName:    user.Username,
-
-		Dependencies: []string{
-			"Requires=network.target",
-			"After=network-online.target syslog.target"},
-		Option: options,
-	}
-
-	daemon := &Daemon{}
-	s, err := service.New(daemon, svcConfig)
+	daemon := Daemon{}
+	autoSyncService, err := common.NewServiceWithDaemon(&daemon)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	s := autoSyncService.Service
+	// FIXME: Figure out this logger buillshit!
 	logger, err = s.Logger(nil)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Println(s.Status())
-	fmt.Println(s.Install())
-	fmt.Println(s.Status())
 
 	err = s.Run()
 	if err != nil {
@@ -96,3 +70,5 @@ func watchForChanges(wg *sync.WaitGroup, repoPath string) {
 		log.Println(err)
 	}
 }
+
+// FIXME: Handle operating system signal which tells it to reload the config
