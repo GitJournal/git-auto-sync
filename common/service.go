@@ -1,7 +1,6 @@
 package common
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"os/user"
@@ -74,7 +73,6 @@ func (srv Service) Enable() error {
 	//       Also stop the old service?
 
 	err := srv.Service.Install()
-	fmt.Println("Installed")
 	if err != nil {
 		if strings.Contains(err.Error(), "Init already exists") {
 			return nil
@@ -91,7 +89,12 @@ func (srv Service) Enable() error {
 }
 
 func (srv Service) Disable() error {
-	err := srv.Service.Uninstall()
+	err := srv.Service.Stop()
+	if err != nil {
+		return tracerr.Wrap(err)
+	}
+
+	err = srv.Service.Uninstall()
 	if err != nil {
 		return tracerr.Wrap(err)
 	}

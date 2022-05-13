@@ -136,7 +136,17 @@ func daemonRm(ctx *cli.Context) error {
 		return tracerr.Wrap(err)
 	}
 
-	// TODO: Disable if it is running and Repos is empty
+	if len(config.Repos) == 0 {
+		s, err := common.NewService()
+		if err != nil {
+			return tracerr.Wrap(err)
+		}
+
+		err = s.Disable()
+		if err != nil {
+			return tracerr.Wrap(err)
+		}
+	}
 
 	return nil
 }
