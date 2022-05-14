@@ -49,7 +49,7 @@ func daemonAdd(ctx *cli.Context) error {
 		// TODO: Check if the parent/ancestor is the repoPath!
 	}
 
-	err := isValidGitRepo(repoPath)
+	repoPath, err := isValidGitRepo(repoPath)
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
@@ -89,22 +89,35 @@ func daemonAdd(ctx *cli.Context) error {
 	return nil
 }
 
-func isValidGitRepo(repoPath string) error {
+func isValidGitRepo(repoPath string) (string, error) {
 	info, err := os.Stat(repoPath)
 	if os.IsNotExist(err) {
-		return tracerr.Errorf("%w - %s", errRepoPathInvalid, repoPath)
+		return "", tracerr.Errorf("%w - %s", errRepoPathInvalid, repoPath)
 	}
 
 	if !info.IsDir() {
-		return tracerr.Errorf("%w - %s", errRepoPathInvalid, repoPath)
+		return "", tracerr.Errorf("%w - %s", errRepoPathInvalid, repoPath)
 	}
 
 	_, err = git.PlainOpenWithOptions(repoPath, &git.PlainOpenOptions{DetectDotGit: true})
 	if err != nil {
-		return tracerr.Errorf("Not a valid git repo - %s\n%w", repoPath, err)
+		return "", tracerr.Errorf("Not a valid git repo - %s\n%w", repoPath, err)
 	}
 
-	return nil
+	for true {
+		_, err := os.Stat(repoPath)
+		if err != nil {
+			return "", tracerr.Errorf("%w - %s", errRepoPathInvalid, repoPath)
+		}
+
+		if repoPath == "." {
+			return "", tracerr.Errorf("%w - %s", errRepoPathInvalid, repoPath)
+		}
+
+		repoPath = filepath.Dir(repoPath)
+	}
+
+	return repoPath, nil
 }
 
 func daemonRm(ctx *cli.Context) error {
