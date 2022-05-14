@@ -10,6 +10,7 @@ import (
 	"github.com/GitJournal/git-auto-sync/common"
 	cli "github.com/urfave/cli/v2"
 	"github.com/ztrue/tracerr"
+	"golang.org/x/exp/slices"
 	git "gopkg.in/src-d/go-git.v4"
 )
 
@@ -46,7 +47,6 @@ func daemonAdd(ctx *cli.Context) error {
 		}
 
 		repoPath = filepath.Join(cwd, repoPath)
-		// TODO: Check if the parent/ancestor is the repoPath!
 	}
 
 	repoPath, err := isValidGitRepo(repoPath)
@@ -59,15 +59,9 @@ func daemonAdd(ctx *cli.Context) error {
 		return tracerr.Wrap(err)
 	}
 
-	contains := false
-	for _, rp := range config.Repos {
-		if rp == repoPath {
-			contains = true
-			break
-		}
-	}
-
-	if !contains {
+	if slices.Contains(config.Repos, repoPath) {
+		fmt.Println("The Daemon is already monitoring " + repoPath)
+	} else {
 		config.Repos = append(config.Repos, repoPath)
 	}
 
@@ -105,16 +99,20 @@ func isValidGitRepo(repoPath string) (string, error) {
 	}
 
 	for true {
-		_, err := os.Stat(repoPath)
+		info, err := os.Stat(filepath.Join(repoPath, ".git"))
 		if err != nil {
 			return "", tracerr.Errorf("%w - %s", errRepoPathInvalid, repoPath)
 		}
 
-		if repoPath == "." {
-			return "", tracerr.Errorf("%w - %s", errRepoPathInvalid, repoPath)
+		if os.IsNotExist(err) {
+			repoPath = filepath.Dir(repoPath)
+			continue
 		}
 
-		repoPath = filepath.Dir(repoPath)
+		if !info.IsDir() {
+			return "", tracerr.Errorf("%w - %s", errRepoPathInvalid, repoPath)
+		}
+		break
 	}
 
 	return repoPath, nil

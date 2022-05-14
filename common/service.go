@@ -1,6 +1,7 @@
 package common
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"os/user"
@@ -69,18 +70,43 @@ func NewService() (Service, error) {
 }
 
 func (srv Service) Enable() error {
-	// TODO: Uninstall the old one, in case it was running
-	//       Also stop the old service?
+	s := srv.Service
 
-	err := srv.Service.Install()
+	status, err := s.Status()
 	if err != nil {
-		if strings.Contains(err.Error(), "Init already exists") {
-			return nil
+		if !strings.Contains(err.Error(), "the service is not installed") {
+			return tracerr.Wrap(err)
 		}
-		return tracerr.Wrap(err)
 	}
 
-	err = srv.Service.Restart()
+	stopped := false
+	if status == service.StatusRunning {
+		err := s.Stop()
+		if err != nil {
+			return tracerr.Wrap(err)
+		}
+		stopped = true
+	}
+
+	err = s.Install()
+	if err != nil {
+		if strings.Contains(err.Error(), "Init already exists") {
+			s.Uninstall()
+			s.Install()
+		} else {
+			return tracerr.Wrap(err)
+		}
+	} else {
+		fmt.Println("Installing git-auto-sync as a daemon")
+	}
+
+	if stopped {
+		fmt.Println("Restarting git-auto-sync-daemon")
+	} else {
+		fmt.Println("Starting git-auto-sync-daemon")
+	}
+
+	err = s.Start()
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
@@ -89,11 +115,13 @@ func (srv Service) Enable() error {
 }
 
 func (srv Service) Disable() error {
+	fmt.Println("Stopping git-auto-sync-daemon")
 	err := srv.Service.Stop()
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
 
+	fmt.Println("Uninstalling git-auto-sync as a daemon")
 	err = srv.Service.Uninstall()
 	if err != nil {
 		return tracerr.Wrap(err)
