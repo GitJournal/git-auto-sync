@@ -7,6 +7,7 @@ import (
 	"github.com/ztrue/tracerr"
 )
 
+// FIXME: Add logs for when we commit, pull, and push
 func AutoSync(repoPath string) error {
 	var err error
 	err = ensureGitAuthor(repoPath)

@@ -20,20 +20,22 @@ func main() {
 		EnableBashCompletion: true,
 		Commands: []*cli.Command{
 			{
-				Name:  "watch",
-				Usage: "Watch a folder for changes",
+				Name:    "watch",
+				Aliases: []string{"monitor", "w", "m"},
+				Usage:   "Monitor a folder for changes",
 				Action: func(ctx *cli.Context) error {
 					repoPath, err := os.Getwd()
 					if err != nil {
 						return tracerr.Wrap(err)
 					}
 
-					return common.WatchForChanges(repoPath)
+					return common.WatchForChanges(common.NewRepoConfig(repoPath))
 				},
 			},
 			{
-				Name:  "sync",
-				Usage: "Sync a repo right now",
+				Name:    "sync",
+				Aliases: []string{"s"},
+				Usage:   "Sync a repo right now",
 				Action: func(ctx *cli.Context) error {
 					repoPath, err := os.Getwd()
 					if err != nil {
@@ -49,8 +51,9 @@ func main() {
 				},
 			},
 			{
-				Name:  "daemon",
-				Usage: "Interact with the background daemon",
+				Name:    "daemon",
+				Aliases: []string{"d"},
+				Usage:   "Interact with the background daemon",
 				Subcommands: []*cli.Command{
 					{
 						Name:   "status",

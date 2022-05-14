@@ -1,7 +1,6 @@
 package common
 
 import (
-	"fmt"
 	"log"
 	"path/filepath"
 	"time"
@@ -11,38 +10,57 @@ import (
 )
 
 // FIXME: Watch for suspend / resume
-// FIXME: Properly log the errors
-// FIXME: Properly log each time this performs a sync
+// FIXME: Replace the logger with returning an error and retrying after 'x' minutes
 
-func WatchForChanges(repoPath string) error {
+type RepoConfig struct {
+	RepoPath     string
+	PollInterval time.Duration
+	FSLag        time.Duration
+}
+
+func NewRepoConfig(repoPath string) RepoConfig {
+	return RepoConfig{
+		RepoPath:     repoPath,
+		PollInterval: 10 * time.Minute,
+		FSLag:        1 * time.Second,
+	}
+}
+
+func WatchForChanges(cfg RepoConfig) error {
+	repoPath := cfg.RepoPath
 	var err error
 
-	err = AutoSync(repoPath)
+	err = AutoSync(cfg.RepoPath)
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
 
 	notifyFilteredChannel := make(chan notify.EventInfo, 100)
-	ticker := time.NewTicker(20 * time.Second)
+	pollTicker := time.NewTicker(cfg.PollInterval)
 
 	// Filtered events
 	go func() {
-		var events []notify.EventInfo
 		for {
 			select {
-			case ei := <-notifyFilteredChannel:
-				events = append(events, ei)
+			case <-notifyFilteredChannel:
+				// Wait 1 second
+				timer1 := time.NewTimer(cfg.FSLag)
+				done := make(chan bool)
+				go func() {
+					<-timer1.C
+					done <- true
+				}()
+
+				err := AutoSync(repoPath)
+				if err != nil {
+					log.Fatalln(err)
+				}
 				continue
 
-			case <-ticker.C:
-				if len(events) != 0 {
-					events = []notify.EventInfo{}
-
-					fmt.Println("Committing")
-					err := AutoSync(repoPath)
-					if err != nil {
-						log.Fatalln(err)
-					}
+			case <-pollTicker.C:
+				err := AutoSync(repoPath)
+				if err != nil {
+					log.Fatalln(err)
 				}
 			}
 		}

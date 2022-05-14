@@ -64,7 +64,8 @@ func main() {
 func watchForChanges(wg *sync.WaitGroup, repoPath string) {
 	defer wg.Done()
 
-	err := common.WatchForChanges(repoPath)
+	cfg := common.NewRepoConfig(repoPath)
+	err := common.WatchForChanges(cfg)
 	if err != nil {
 		log.Println(err)
 	}
