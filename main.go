@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
 	cli "github.com/urfave/cli/v2"
 	"github.com/ztrue/tracerr"
@@ -46,6 +48,35 @@ func main() {
 					if err != nil {
 						return tracerr.Wrap(err)
 					}
+
+					return nil
+				},
+			},
+			{
+				Name:  "check",
+				Usage: "Check if a file will be ignored",
+				Action: func(ctx *cli.Context) error {
+					repoPath, err := os.Getwd()
+					if err != nil {
+						return tracerr.Wrap(err)
+					}
+
+					repoPath, err = isValidGitRepo(repoPath)
+					if err != nil {
+						return tracerr.Wrap(err)
+					}
+
+					path := ctx.Args().First()
+					path, err = filepath.Abs(path)
+					if err != nil {
+						return tracerr.Wrap(err)
+					}
+
+					ignored, err := common.ShouldIgnoreFile(repoPath, path)
+					if err != nil {
+						return tracerr.Wrap(err)
+					}
+					fmt.Println("Ignored:", ignored)
 
 					return nil
 				},

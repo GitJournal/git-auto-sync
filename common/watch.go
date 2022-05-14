@@ -79,7 +79,7 @@ func WatchForChanges(cfg RepoConfig) error {
 
 	for {
 		ei := <-notifyChannel
-		ignore, err := shouldIgnoreFile(repoPath, ei.Path())
+		ignore, err := ShouldIgnoreFile(repoPath, ei.Path())
 		if err != nil {
 			return tracerr.Wrap(err)
 		}

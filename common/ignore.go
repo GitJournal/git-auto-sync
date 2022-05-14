@@ -10,7 +10,7 @@ import (
 	"gopkg.in/src-d/go-git.v4/plumbing/format/gitignore"
 )
 
-func shouldIgnoreFile(repoPath string, fullFilePath string) (bool, error) {
+func ShouldIgnoreFile(repoPath string, fullFilePath string) (bool, error) {
 	fileName := filepath.Base(fullFilePath)
 	var isTempFile = strings.HasSuffix(fileName, ".swp") || // vim
 		strings.HasPrefix(fileName, "~") || // emacs

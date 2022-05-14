@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/GitJournal/git-auto-sync/common"
 	cli "github.com/urfave/cli/v2"
@@ -40,16 +39,12 @@ func daemonList(ctx *cli.Context) error {
 
 func daemonAdd(ctx *cli.Context) error {
 	repoPath := ctx.Args().First()
-	if !strings.HasPrefix(repoPath, string(filepath.Separator)) {
-		cwd, err := os.Getwd()
-		if err != nil {
-			return tracerr.Wrap(err)
-		}
-
-		repoPath = filepath.Join(cwd, repoPath)
+	repoPath, err := filepath.Abs(repoPath)
+	if err != nil {
+		return tracerr.Wrap(err)
 	}
 
-	repoPath, err := isValidGitRepo(repoPath)
+	repoPath, err = isValidGitRepo(repoPath)
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
@@ -120,13 +115,9 @@ func isValidGitRepo(repoPath string) (string, error) {
 
 func daemonRm(ctx *cli.Context) error {
 	repoPath := ctx.Args().First()
-	if !strings.HasPrefix(repoPath, string(filepath.Separator)) {
-		cwd, err := os.Getwd()
-		if err != nil {
-			return tracerr.Wrap(err)
-		}
-
-		repoPath = filepath.Join(cwd, repoPath)
+	repoPath, err := filepath.Abs(repoPath)
+	if err != nil {
+		return tracerr.Wrap(err)
 	}
 
 	config, err := common.ReadConfig()
