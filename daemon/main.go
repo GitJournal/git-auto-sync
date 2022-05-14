@@ -48,7 +48,6 @@ func main() {
 	}
 
 	s := autoSyncService.Service
-	// FIXME: Figure out this logger buillshit!
 	logger, err = s.Logger(nil)
 	if err != nil {
 		log.Fatal(err)
