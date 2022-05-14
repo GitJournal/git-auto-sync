@@ -10,6 +10,7 @@ require (
 	github.com/rjeczalik/notify v0.9.2
 	github.com/urfave/cli/v2 v2.5.1
 	github.com/ztrue/tracerr v0.3.0
+	golang.org/x/exp v0.0.0-20220428152302-39d4317da171
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gotest.tools/v3 v3.2.0
 )
@@ -31,7 +32,6 @@ require (
 	github.com/tadvi/systray v0.0.0-20190226123456-11a2b8fa57af // indirect
 	github.com/xanzy/ssh-agent v0.2.1 // indirect
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 // indirect
-	golang.org/x/exp v0.0.0-20220428152302-39d4317da171 // indirect
 	golang.org/x/net v0.0.0-20201021035429-f5854403a974 // indirect
 	golang.org/x/sys v0.0.0-20220429233432-b5fbb4746d32 // indirect
 	gopkg.in/src-d/go-billy.v4 v4.3.2 // indirect
