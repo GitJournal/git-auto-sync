@@ -16,6 +16,12 @@ import (
 var errRepoPathInvalid = errors.New("Not a valid git repo")
 
 func daemonStatus(ctx *cli.Context) error {
+	// FIXME: Implement 'daemonStatus'
+
+	// Print out the configuration
+	// Print out uptime
+	// Print out if there are any 'rebasing' issues and we are paused
+
 	return nil
 }
 

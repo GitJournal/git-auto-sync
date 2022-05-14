@@ -60,8 +60,6 @@ func main() {
 						Usage:  "Show the Daemon's status",
 						Action: daemonStatus,
 					},
-					// FIXME: Move these functions output of the daemon subcommand
-					// Maybe even remove the daemon subcommand alltogether
 					{
 						Name:    "list",
 						Aliases: []string{"ls"},
