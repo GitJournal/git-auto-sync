@@ -1,49 +1,45 @@
 # Git Auto Sync
 
-## Existing Work
-- https://marketplace.visualstudio.com/items?itemName=vsls-contrib.gitdoc
-- auto sync script
-- Obsidian's git plugin
+GitAutoSync is a simple command line program to automatically commit changes
+to your git repo, and always keep that repo up to date.
 
-Lets write this in GoLang as that's the easiest to do. It'll also work across
-all platforms, and it will be simple to deploy. Very low memory footprint.
+This way you can use any editor with your text files, and never need to worry about
+comitting and remembering to push and pull changes.
 
-Later we can add a GUI based on electron if required or hell, even Qt.
+## Installation
 
-- List of paths where the repo exists
-  - It will sync all branches that are being tracked?
-  - Just the current branch?
+* OSX - `brew install GitJournal/tap/git-auto-sync`
+* Linux - Download the [latest release](https://github.com/GitJournal/git-auto-sync/releases/latest)
+* Windows - Download the [latest release](https://github.com/GitJournal/git-auto-sync/releases/latest)
 
-  - Polling Frequency
-  - Watch for FS changes
+## How to use?
 
-  - Optional pausing of this checking when certain apps are open
-  - Optional pausing for certain files until program is closed
-    - .fileName.swp (for vim)
-      .fileName.swap (for ?)
-      ~fileName (for emacs?)
-      or fileName~ for kate
-    - Ignore all hidden files
-    - Stops 'FS' changes, but polling should still happen for that file
-      in case we don't close the editor for a long time or if the editor crashes
+GitAutoSync comes with a manual and daemon mode. It's recommended to start with the manual
+mode to ensure authentication is working correctly. It internally just calls the `git` executable
+so, if that works, `git-auto-sync` should just work.
 
-- Provide a SystemD service file
-- Provide one for MacOS
+You can test it out by running `git-auto-sync sync` to commit, pull, rebase and push any changes.
+If there are no changes, it will just attempt to pull, rebase and push.
 
-## Daemon
+Once you're satisfied that `git-auto-sync` is working for you. You can run `git-auto-sync daemon add <repoPath>` to start a background daemon which will continously monitor that repo for any changes
+in the file system and accordingly sync the changes.
 
-There can be a git-auto-sync-daemon or `gasd`. I'm a bit scared about name collision. But it seems to be fine.
+This daemon will be automatically started as a system process.
 
-* https://github.com/takama/daemon
-  - Has Windows support
+You can check if it is running by looking for a process called `git-auto-sync-daemon`
 
-* https://github.com/kardianos/service
-* https://ieftimov.com/posts/four-steps-daemonize-your-golang-programs/
+### Merge Conflicts
 
-See if I can figure out 'onSuspend' and 'onResume' events. Also onShutdown and onBoot.
+GitAutoSync current only supports rebases, and doesn't yet attempt to do a merge. In the case of a
+rebase conflict, it will abort and stop syncing that repo. It will send a system notification
+to inform you of the conflict.
 
-- https://github.com/prashantgupta24/mac-sleep-notifier
-- How to do so on Linux?
-  - https://github.com/coreos/go-systemd
-  - logind signal - PrepareForSleep & PrepareForShutdown
-  - Possibly even inhibit shutdown / suspend
+### Ignored Files
+
+It currently ignores all hidden files, files ignored by git, and additional temporary swap files
+created by vim, emacs and similar editors.
+
+## Similar Projects
+
+- [Obsidian Git](https://github.com/denolehov/obsidian-git)
+- [VS Code GitDoc](https://marketplace.visualstudio.com/items?itemName=vsls-contrib.gitdoc)
