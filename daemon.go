@@ -16,15 +16,15 @@ import (
 
 var errRepoPathInvalid = errors.New("Not a valid git repo")
 
-func daemonStatus(ctx *cli.Context) error {
-	// FIXME: Implement 'daemonStatus'
+// func daemonStatus(ctx *cli.Context) error {
+// FIXME: Implement 'daemonStatus'
 
-	// Print out the configuration
-	// Print out uptime
-	// Print out if there are any 'rebasing' issues and we are paused
+// Print out the configuration
+// Print out uptime
+// Print out if there are any 'rebasing' issues and we are paused
 
-	return nil
-}
+// return nil
+// }
 
 func daemonList(ctx *cli.Context) error {
 	config, err := common.ReadConfig()
@@ -98,7 +98,7 @@ func isValidGitRepo(repoPath string) (string, error) {
 		return "", tracerr.Errorf("Not a valid git repo - %s\n%w", repoPath, err)
 	}
 
-	for true {
+	for {
 		info, err := os.Stat(filepath.Join(repoPath, ".git"))
 		if err != nil {
 			return "", tracerr.Errorf("%w - %s", errRepoPathInvalid, repoPath)

@@ -91,8 +91,8 @@ func (srv Service) Enable() error {
 	err = s.Install()
 	if err != nil {
 		if strings.Contains(err.Error(), "Init already exists") {
-			s.Uninstall()
-			s.Install()
+			_ = s.Uninstall()
+			_ = s.Install()
 		} else {
 			return tracerr.Wrap(err)
 		}

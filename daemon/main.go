@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"sync"
 
@@ -28,7 +29,7 @@ func (d *Daemon) run() {
 	for _, repoPath := range config.Repos {
 		wg.Add(1)
 
-		logger.Info("Monitoring", repoPath)
+		fmt.Println("Monitoring", repoPath)
 		go watchForChanges(&wg, repoPath)
 	}
 
