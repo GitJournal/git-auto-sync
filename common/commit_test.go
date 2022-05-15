@@ -42,19 +42,31 @@ func Test_NoChanges(t *testing.T) {
 	assert.Equal(t, head.Hash(), plumbing.NewHash("28cc969d97ddb7640f5e1428bbc8f2947d1ffd57"))
 }
 
-func Test_NewFile(t *testing.T) {
-	repoPath := PrepareFixture(t, "new_file")
-
-	err := commit(repoPath)
-	assert.NilError(t, err)
-
+func HasHeadCommit(t *testing.T, repoPath string, hash string, msg string) {
 	r, err := git.PlainOpen(repoPath)
 	assert.NilError(t, err)
 
 	head, err := r.Head()
 	assert.NilError(t, err)
 
-	assert.Assert(t, head.Hash() != plumbing.NewHash("28cc969d97ddb7640f5e1428bbc8f2947d1ffd57"))
+	assert.Assert(t, head.Hash() != plumbing.NewHash(hash))
+
+	commit, err := r.CommitObject(head.Hash())
+	assert.NilError(t, err)
+
+	parent, err := commit.Parent(0)
+	assert.NilError(t, err)
+	assert.Equal(t, parent.ID(), plumbing.NewHash(hash))
+	assert.Equal(t, commit.Message, msg)
+}
+
+func Test_NewFile(t *testing.T) {
+	repoPath := PrepareFixture(t, "new_file")
+
+	err := commit(repoPath)
+	assert.NilError(t, err)
+
+	HasHeadCommit(t, repoPath, "28cc969d97ddb7640f5e1428bbc8f2947d1ffd57", "?? 2.md\n")
 }
 
 func Test_OneFileChange(t *testing.T) {
@@ -63,13 +75,7 @@ func Test_OneFileChange(t *testing.T) {
 	err := commit(repoPath)
 	assert.NilError(t, err)
 
-	r, err := git.PlainOpen(repoPath)
-	assert.NilError(t, err)
-
-	head, err := r.Head()
-	assert.NilError(t, err)
-
-	assert.Assert(t, head.Hash() != plumbing.NewHash("28cc969d97ddb7640f5e1428bbc8f2947d1ffd57"))
+	HasHeadCommit(t, repoPath, "28cc969d97ddb7640f5e1428bbc8f2947d1ffd57", " M 1.md\n")
 }
 
 func Test_MultipleFileChange(t *testing.T) {
@@ -78,14 +84,5 @@ func Test_MultipleFileChange(t *testing.T) {
 	err := commit(repoPath)
 	assert.NilError(t, err)
 
-	r, err := git.PlainOpen(repoPath)
-	assert.NilError(t, err)
-
-	head, err := r.Head()
-	assert.NilError(t, err)
-
-	assert.Assert(t, head.Hash() != plumbing.NewHash("7058b6b292ee3d1382670334b5f29570a1117ef1"))
+	HasHeadCommit(t, repoPath, "7058b6b292ee3d1382670334b5f29570a1117ef1", " M 1.md\n D dirA/2.md\n?? dirB/\n")
 }
-
-// TODO
-// * The commit message is how we want it
