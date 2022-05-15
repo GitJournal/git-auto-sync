@@ -82,6 +82,14 @@ func main() {
 				},
 			},
 			{
+				Name:  "version",
+				Usage: "Print the version",
+				Action: func(ctx *cli.Context) error {
+					cli.VersionPrinter(ctx)
+					return nil
+				},
+			},
+			{
 				Name:    "daemon",
 				Aliases: []string{"d"},
 				Usage:   "Interact with the background daemon",
