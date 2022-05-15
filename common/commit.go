@@ -3,6 +3,7 @@ package common
 import (
 	"bytes"
 	"os/exec"
+	"sort"
 	"strings"
 
 	"github.com/ztrue/tracerr"
@@ -26,7 +27,7 @@ func commit(repoPath string) error {
 	}
 
 	hasChanges := false
-	commitMsg := ""
+	commitMsg := []string{}
 	for filePath, fileStatus := range status {
 		if fileStatus.Worktree == git.Unmodified && fileStatus.Staging == git.Unmodified {
 			continue
@@ -47,19 +48,24 @@ func commit(repoPath string) error {
 			return tracerr.Wrap(err)
 		}
 
+		msg := ""
 		if fileStatus.Worktree == git.Untracked && fileStatus.Staging == git.Untracked {
-			commitMsg += "?? "
+			msg += "?? "
 		} else {
-			commitMsg += " " + string(fileStatus.Worktree) + " "
+			msg += " " + string(fileStatus.Worktree) + " "
 		}
-		commitMsg += filePath + "\n"
+		msg += filePath
+		commitMsg = append(commitMsg, msg)
 	}
+
+	sort.Strings(commitMsg)
+	msg := strings.Join(commitMsg, "\n")
 
 	if !hasChanges {
 		return nil
 	}
 
-	_, err = GitCommand(repoPath, []string{"commit", "-m", commitMsg})
+	_, err = GitCommand(repoPath, []string{"commit", "-m", msg})
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
