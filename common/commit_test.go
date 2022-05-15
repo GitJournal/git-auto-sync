@@ -78,6 +78,21 @@ func Test_OneFileChange(t *testing.T) {
 	HasHeadCommit(t, repoPath, "28cc969d97ddb7640f5e1428bbc8f2947d1ffd57", " M 1.md\n")
 }
 
+func Test_VimSwapFile(t *testing.T) {
+	repoPath := PrepareFixture(t, "vim_swap_file")
+
+	err := commit(repoPath)
+	assert.NilError(t, err)
+
+	r, err := git.PlainOpen(repoPath)
+	assert.NilError(t, err)
+
+	head, err := r.Head()
+	assert.NilError(t, err)
+
+	assert.Equal(t, head.Hash(), plumbing.NewHash("28cc969d97ddb7640f5e1428bbc8f2947d1ffd57"))
+}
+
 func Test_MultipleFileChange(t *testing.T) {
 	repoPath := PrepareFixture(t, "multiple_file_change")
 
