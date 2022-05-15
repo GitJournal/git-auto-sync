@@ -45,18 +45,18 @@ func main() {
 	daemon := Daemon{}
 	autoSyncService, err := common.NewServiceWithDaemon(&daemon)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("BuildService", err)
 	}
 
 	s := autoSyncService.Service
 	logger, err = s.Logger(nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("BuildLogger", err)
 	}
 
 	err = s.Run()
 	if err != nil {
-		_ = logger.Error(err)
+		log.Fatal("RunService", err)
 	}
 }
 

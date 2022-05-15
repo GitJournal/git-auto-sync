@@ -2,9 +2,7 @@ package common
 
 import (
 	"fmt"
-	"log"
 	"os"
-	"os/user"
 	"path/filepath"
 	"strings"
 
@@ -27,11 +25,6 @@ func (d emptyDaemon) Stop(s service.Service) error {
 }
 
 func NewServiceWithDaemon(daemon service.Interface) (Service, error) {
-	user, err := user.Current()
-	if err != nil {
-		log.Fatalf(err.Error())
-	}
-
 	options := make(service.KeyValue)
 	options["Restart"] = "on-success"
 	options["UserService"] = true
@@ -39,7 +32,7 @@ func NewServiceWithDaemon(daemon service.Interface) (Service, error) {
 
 	ex, err := os.Executable()
 	if err != nil {
-		panic(err)
+		return Service{}, tracerr.Wrap(err)
 	}
 	exDirPath := filepath.Dir(ex)
 	executablePath := filepath.Join(exDirPath, "git-auto-sync-daemon")
@@ -48,11 +41,9 @@ func NewServiceWithDaemon(daemon service.Interface) (Service, error) {
 		Name:        "git-auto-sync-daemon",
 		DisplayName: "Git Auto Sync Daemon",
 		Description: "Background Process for Auto Syncing Git Repos",
-		UserName:    user.Username,
 
 		Executable: executablePath,
 		Dependencies: []string{
-			"Requires=network.target",
 			"After=network-online.target syslog.target"},
 		Option: options,
 	}
