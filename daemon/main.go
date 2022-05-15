@@ -9,8 +9,6 @@ import (
 	"github.com/kardianos/service"
 )
 
-var logger service.Logger
-
 type Daemon struct{}
 
 func (d *Daemon) Start(s service.Service) error {
@@ -49,14 +47,14 @@ func main() {
 	}
 
 	s := autoSyncService.Service
-	logger, err = s.Logger(nil)
+	logger, err := s.Logger(nil)
 	if err != nil {
 		log.Fatal("BuildLogger", err)
 	}
 
 	err = s.Run()
 	if err != nil {
-		log.Fatal("RunService", err)
+		_ = logger.Error("RunService", err)
 	}
 }
 
