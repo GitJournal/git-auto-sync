@@ -42,3 +42,4 @@ created by vim, emacs and similar editors.
 - [Obsidian Git](https://github.com/denolehov/obsidian-git)
 - [VS Code GitDoc](https://marketplace.visualstudio.com/items?itemName=vsls-contrib.gitdoc)
 - [Git Annex](https://git-annex.branchable.com/)
+- [Git Sync](https://github.com/simonthum/git-sync)
