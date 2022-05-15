@@ -32,8 +32,17 @@ func commit(repoPath string) error {
 			continue
 		}
 
+		ignore, err := ShouldIgnoreFile(repoPath, filePath)
+		if err != nil {
+			return tracerr.Wrap(err)
+		}
+
+		if ignore {
+			continue
+		}
+
 		hasChanges = true
-		_, err := w.Add(filePath)
+		_, err = w.Add(filePath)
 		if err != nil {
 			return tracerr.Wrap(err)
 		}
