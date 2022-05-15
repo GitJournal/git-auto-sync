@@ -84,5 +84,5 @@ func Test_MultipleFileChange(t *testing.T) {
 	err := commit(repoPath)
 	assert.NilError(t, err)
 
-	HasHeadCommit(t, repoPath, "7058b6b292ee3d1382670334b5f29570a1117ef1", " M 1.md\n D dirA/2.md\n?? dirB/\n")
+	HasHeadCommit(t, repoPath, "7058b6b292ee3d1382670334b5f29570a1117ef1", " M 1.md\n D dirA/2.md\n?? dirB/3.md\n")
 }

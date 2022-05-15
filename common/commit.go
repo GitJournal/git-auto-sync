@@ -6,23 +6,51 @@ import (
 	"strings"
 
 	"github.com/ztrue/tracerr"
+	git "gopkg.in/src-d/go-git.v4"
 )
 
 func commit(repoPath string) error {
-	outb, err := GitCommand(repoPath, []string{"status", "--porcelain"})
-
-	if err == nil {
-		if len(outb.Bytes()) == 0 {
-			return nil
-		}
-	}
-
-	_, err = GitCommand(repoPath, []string{"add", "--all"})
+	repo, err := git.PlainOpenWithOptions(repoPath, &git.PlainOpenOptions{DetectDotGit: true})
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
 
-	_, err = GitCommand(repoPath, []string{"commit", "-m", outb.String()})
+	w, err := repo.Worktree()
+	if err != nil {
+		return tracerr.Wrap(err)
+	}
+
+	status, err := w.Status()
+	if err != nil {
+		return tracerr.Wrap(err)
+	}
+
+	hasChanges := false
+	commitMsg := ""
+	for filePath, fileStatus := range status {
+		if fileStatus.Worktree == git.Unmodified && fileStatus.Staging == git.Unmodified {
+			continue
+		}
+
+		hasChanges = true
+		_, err := w.Add(filePath)
+		if err != nil {
+			return tracerr.Wrap(err)
+		}
+
+		if fileStatus.Worktree == git.Untracked && fileStatus.Staging == git.Untracked {
+			commitMsg += "?? "
+		} else {
+			commitMsg += " " + string(fileStatus.Worktree) + " "
+		}
+		commitMsg += filePath + "\n"
+	}
+
+	if !hasChanges {
+		return nil
+	}
+
+	_, err = GitCommand(repoPath, []string{"commit", "-m", commitMsg})
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
