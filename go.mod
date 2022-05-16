@@ -7,6 +7,7 @@ require (
 	github.com/kardianos/service v1.2.1
 	github.com/kirsle/configdir v0.0.0-20170128060238-e45d2f54772f
 	github.com/otiai10/copy v1.7.0
+	github.com/prashantgupta24/mac-sleep-notifier v1.0.1
 	github.com/rjeczalik/notify v0.9.2
 	github.com/urfave/cli/v2 v2.5.1
 	github.com/ztrue/tracerr v0.3.0
@@ -26,7 +27,6 @@ require (
 	github.com/logrusorgru/aurora v0.0.0-20181002194514-a7b3b318ed4e // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d // indirect
-	github.com/prashantgupta24/mac-sleep-notifier v1.0.1 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sergi/go-diff v1.0.0 // indirect
 	github.com/src-d/gcfg v1.4.0 // indirect
