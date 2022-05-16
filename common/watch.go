@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/prashantgupta24/mac-sleep-notifier/notifier"
 	"github.com/rjeczalik/notify"
 	"github.com/ztrue/tracerr"
 )
@@ -35,11 +36,13 @@ func WatchForChanges(cfg RepoConfig) error {
 		return tracerr.Wrap(err)
 	}
 
-	notifyFilteredChannel := make(chan notify.EventInfo, 100)
+	notifyFilteredChannel := make(chan bool, 100)
 	pollTicker := time.NewTicker(cfg.PollInterval)
 
 	// Filtered events
 	go func() {
+		suspendResumeNotifier := notifier.GetInstance().Start()
+
 		for {
 			select {
 			case <-notifyFilteredChannel:
@@ -61,6 +64,11 @@ func WatchForChanges(cfg RepoConfig) error {
 				err := AutoSync(repoPath)
 				if err != nil {
 					log.Fatalln(err)
+				}
+
+			case activity := <-suspendResumeNotifier:
+				if activity.Type == notifier.Sleep {
+					notifyFilteredChannel <- true
 				}
 			}
 		}
@@ -87,6 +95,6 @@ func WatchForChanges(cfg RepoConfig) error {
 			continue
 		}
 
-		notifyFilteredChannel <- ei
+		notifyFilteredChannel <- true
 	}
 }
