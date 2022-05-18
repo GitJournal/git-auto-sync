@@ -107,4 +107,4 @@ snapcrafts:
     apps:
       git-auto-sync:
         command: git-auto-sync
-        completer: completions/bash_completion
+        completer: completions/bash_autocomplete
