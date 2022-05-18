@@ -103,7 +103,7 @@ snapcrafts:
     confinement: classic
     license: Apache-2.0
     base: core20
-    grade: devel
+    grade: stable
     apps:
       git-auto-sync:
         command: git-auto-sync
