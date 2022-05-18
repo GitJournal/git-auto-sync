@@ -91,18 +91,18 @@ brews:
       zsh_completion.install "completions/zsh_autocomplete"
 
 snapcrafts:
-  publish: true
-  summary: Automatically sync your changes in any git repository
-  description: |
-    GitAutoSync is a simple command line program to automatically commit changes
-    to your git repo, and always keep that repo up to date. This way you can use
-    any editor with your text files, and never need to worry about committing
-    and remembering to push and pull changes.
-  confinement: classic
-  license: Apache-2.0
-  base: core20
-  grade: devel
-  apps:
-    git-auto-sync:
-      command: git-auto-sync
-      completer: completions/bash_completion
+  - publish: true
+    summary: Automatically sync your changes in any git repository
+    description: |
+      GitAutoSync is a simple command line program to automatically commit changes
+      to your git repo, and always keep that repo up to date. This way you can use
+      any editor with your text files, and never need to worry about committing
+      and remembering to push and pull changes.
+    confinement: classic
+    license: Apache-2.0
+    base: core20
+    grade: devel
+    apps:
+      git-auto-sync:
+        command: git-auto-sync
+        completer: completions/bash_completion
