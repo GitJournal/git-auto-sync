@@ -43,23 +43,23 @@ archives:
       - completions/bash_autocomplete
       - completions/zsh_autocomplete
 checksum:
-  name_template: 'checksums.txt'
+  name_template: "checksums.txt"
 snapshot:
   name_template: "{{ incpatch .Version }}-next"
 changelog:
   sort: asc
   filters:
     exclude:
-      - '^docs:'
-      - '^test:'
+      - "^docs:"
+      - "^test:"
 brews:
-- name: git-auto-sync
-  homepage: https://github.com/GitJournal/homebrew-tap
-  tap:
-    owner: GitJournal
-    name: homebrew-tap
-    token: "{{ .Env.TAP_GITHUB_TOKEN }}"
-  install: |
-    bin.install "git-auto-sync"
-    bash_completion.install "completions/bash_autocomplete"
-    zsh_completion.install "completions/zsh_autocomplete"
+  - name: git-auto-sync
+    homepage: https://github.com/GitJournal/homebrew-tap
+    tap:
+      owner: GitJournal
+      name: homebrew-tap
+      token: "{{ .Env.TAP_GITHUB_TOKEN }}"
+    install: |
+      bin.install "git-auto-sync"
+      bash_completion.install "completions/bash_autocomplete"
+      zsh_completion.install "completions/zsh_autocomplete"
