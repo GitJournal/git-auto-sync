@@ -3,17 +3,17 @@ package common
 import "github.com/prashantgupta24/mac-sleep-notifier/notifier"
 
 type AwakeNotifierDarwn struct {
-	notifier *notifier.Notifer
+	n *notifier.Notifier
 }
 
 func NewAwakeNotifier() (*AwakeNotifierDarwn, error) {
 	n := notifier.GetInstance()
 
-	return AwakeNotifierDarwn{notifier: n}, nil
+	return &AwakeNotifierDarwn{n: n}, nil
 }
 
 func (a *AwakeNotifierDarwn) Start(out chan bool) error {
-	suspendResumeNotifier := a.Start()
+	suspendResumeNotifier := a.n.Start()
 
 	go func() {
 		for {
@@ -26,5 +26,5 @@ func (a *AwakeNotifierDarwn) Start(out chan bool) error {
 		}
 	}()
 
-	return out, nil
+	return nil
 }
