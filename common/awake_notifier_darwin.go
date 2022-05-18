@@ -17,11 +17,9 @@ func (a *AwakeNotifierDarwn) Start(out chan bool) error {
 
 	go func() {
 		for {
-			select {
-			case activity := <-suspendResumeNotifier:
-				if activity.Type == notifier.Awake {
-					out <- true
-				}
+			activity := <-suspendResumeNotifier
+			if activity.Type == notifier.Awake {
+				out <- true
 			}
 		}
 	}()
