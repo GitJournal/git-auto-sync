@@ -5,18 +5,20 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/prashantgupta24/mac-sleep-notifier/notifier"
 	"github.com/rjeczalik/notify"
 	"github.com/ztrue/tracerr"
 )
 
-// FIXME: Watch for suspend / resume
 // FIXME: Replace the logger with returning an error and retrying after 'x' minutes
 
 type RepoConfig struct {
 	RepoPath     string
 	PollInterval time.Duration
 	FSLag        time.Duration
+}
+
+type AwakeNotifier interface {
+	Start(chan bool) error
 }
 
 func NewRepoConfig(repoPath string) RepoConfig {
@@ -40,8 +42,16 @@ func WatchForChanges(cfg RepoConfig) error {
 	pollTicker := time.NewTicker(cfg.PollInterval)
 
 	// Filtered events
-	go func() {
-		suspendResumeNotifier := notifier.GetInstance().Start()
+	go func() error {
+		notifier, err := NewAwakeNotifier()
+		if err != nil {
+			return tracerr.Wrap(err)
+		}
+
+		err = notifier.Start(notifyFilteredChannel)
+		if err != nil {
+			return tracerr.Wrap(err)
+		}
 
 		for {
 			select {
@@ -64,11 +74,6 @@ func WatchForChanges(cfg RepoConfig) error {
 				err := AutoSync(repoPath)
 				if err != nil {
 					log.Fatalln(err)
-				}
-
-			case activity := <-suspendResumeNotifier:
-				if activity.Type == notifier.Sleep {
-					notifyFilteredChannel <- true
 				}
 			}
 		}
