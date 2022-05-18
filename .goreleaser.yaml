@@ -17,10 +17,36 @@ builds:
       - arm
       - arm64
 
+  - binary: git-auto-sync-daemon
+    id: git-auto-sync-daemon
+    dir: daemon
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm
+      - arm64
+
   # Macos build needs to be built on macos
   # https://github.com/rjeczalik/notify/issues/177
   - binary: git-auto-sync
     id: git-auto-sync-macos
+    env:
+      - CGO_ENABLED=1
+      - CC=clang
+      - CXX=clang++
+    goos:
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+
+  - binary: git-auto-sync-daemon
+    id: git-auto-sync-daemon-macos
+    dir: daemon
     env:
       - CGO_ENABLED=1
       - CC=clang
@@ -63,3 +89,20 @@ brews:
       bin.install "git-auto-sync"
       bash_completion.install "completions/bash_autocomplete"
       zsh_completion.install "completions/zsh_autocomplete"
+
+snapcrafts:
+  publish: true
+  summary: Automatically sync your changes in any git repository
+  description: |
+    GitAutoSync is a simple command line program to automatically commit changes
+    to your git repo, and always keep that repo up to date. This way you can use
+    any editor with your text files, and never need to worry about committing
+    and remembering to push and pull changes.
+  confinement: classic
+  license: Apache-2.0
+  base: core20
+  grade: devel
+  apps:
+    git-auto-sync:
+      command: git-auto-sync
+      completer: completions/bash_completion
