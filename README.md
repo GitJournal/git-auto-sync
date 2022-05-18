@@ -26,6 +26,12 @@ This daemon will be automatically started as a system process.
 
 You can check if it is running by looking for a process called `git-auto-sync-daemon`
 
+### Background Daemon
+
+The background daemon will be started / stopped automatically if there are any repos to watch in `git-auto-sync daemon ls`.
+This process will monitor the filesystem, poll every 10 minutes, and additionally try to sync on resuming from a suspend. The latter
+two are done to pick up changes from the remote.
+
 ### Merge Conflicts
 
 GitAutoSync current only supports rebases, and doesn't yet attempt to do a merge. In the case of a
