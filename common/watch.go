@@ -42,15 +42,15 @@ func WatchForChanges(cfg RepoConfig) error {
 	pollTicker := time.NewTicker(cfg.PollInterval)
 
 	// Filtered events
-	go func() error {
+	go func() {
 		notifier, err := NewAwakeNotifier()
 		if err != nil {
-			return tracerr.Wrap(err)
+			log.Fatalln(err)
 		}
 
 		err = notifier.Start(notifyFilteredChannel)
 		if err != nil {
-			return tracerr.Wrap(err)
+			log.Fatalln(err)
 		}
 
 		for {
