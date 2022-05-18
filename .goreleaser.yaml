@@ -80,13 +80,15 @@ changelog:
       - "^test:"
 brews:
   - name: git-auto-sync
-    homepage: https://github.com/GitJournal/homebrew-tap
+    homepage: https://github.com/GitJournal/git-auto-sync
+    license: Apache-2.0
     tap:
       owner: GitJournal
       name: homebrew-tap
       token: "{{ .Env.TAP_GITHUB_TOKEN }}"
     install: |
       bin.install "git-auto-sync"
+      bin.install "git-auto-sync-daemon"
       bash_completion.install "completions/bash_autocomplete"
       zsh_completion.install "completions/zsh_autocomplete"
 

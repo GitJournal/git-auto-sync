@@ -6,3 +6,5 @@
 
 * Add a merge strategy where it doesn't take the YAML header changes into account
 * Add a way to only sync some-subfolder in a repo
+* Ensure that the 'daemon' process can be found
+  - It seems it wasn't being installed by the homebrew package
