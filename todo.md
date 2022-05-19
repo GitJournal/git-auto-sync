@@ -18,3 +18,5 @@
   - Make sure that branch has a proper remote tracking branch
 
 * Write about how to handle the case with an ssh-agent running
+
+* When stopping the daemon, do not do anything if it is not running
