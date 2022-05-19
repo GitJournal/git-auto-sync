@@ -4,8 +4,8 @@ import (
 	"github.com/ztrue/tracerr"
 )
 
-func push(repoPath string) error {
-	bi, err := fetchBranchInfo(repoPath)
+func push(repoConfig RepoConfig) error {
+	bi, err := fetchBranchInfo(repoConfig.RepoPath)
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
@@ -14,7 +14,7 @@ func push(repoPath string) error {
 		return nil
 	}
 
-	_, err = GitCommand(repoPath, []string{"push", bi.UpstreamRemote, bi.UpstreamBranch})
+	_, err = GitCommand(repoConfig, []string{"push", bi.UpstreamRemote, bi.UpstreamBranch})
 	if err != nil {
 		return tracerr.Wrap(err)
 	}

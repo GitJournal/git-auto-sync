@@ -13,13 +13,14 @@ import (
 
 var errRebaseFailed = errors.New("git rebase failed")
 
-func rebase(repoPath string) error {
+func rebase(repoConfig RepoConfig) error {
+	repoPath := repoConfig.RepoPath
 	bi, err := fetchBranchInfo(repoPath)
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
 
-	_, rebaseErr := GitCommand(repoPath, []string{"rebase", bi.UpstreamRemote + "/" + bi.UpstreamBranch})
+	_, rebaseErr := GitCommand(repoConfig, []string{"rebase", bi.UpstreamRemote + "/" + bi.UpstreamBranch})
 	if rebaseErr != nil {
 		rebaseInProgress, err := isRebasing(repoPath)
 		if err != nil {
@@ -28,7 +29,7 @@ func rebase(repoPath string) error {
 
 		var exerr *exec.ExitError
 		if errors.As(rebaseErr, &exerr) && exerr.ExitCode() == 1 && rebaseInProgress {
-			_, err := GitCommand(repoPath, []string{"rebase", "--abort"})
+			_, err := GitCommand(repoConfig, []string{"rebase", "--abort"})
 			if err != nil {
 				return tracerr.Wrap(err)
 			}

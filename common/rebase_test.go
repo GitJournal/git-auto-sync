@@ -10,12 +10,12 @@ import (
 
 // No new commits on remote or local
 func Test_RebaseNothing(t *testing.T) {
-	repoPath := PrepareMultiFixtures(t, "rebase_nothing", []string{"rebase_parent"})
+	repoConfig := PrepareMultiFixtures(t, "rebase_nothing", []string{"rebase_parent"})
 
-	err := rebase(repoPath)
+	err := rebase(repoConfig)
 	assert.NilError(t, err)
 
-	r, err := git.PlainOpen(repoPath)
+	r, err := git.PlainOpen(repoConfig.RepoPath)
 	assert.NilError(t, err)
 
 	head, err := r.Head()
@@ -26,12 +26,12 @@ func Test_RebaseNothing(t *testing.T) {
 
 // New commits on local
 func Test_RebaseLocalCommits(t *testing.T) {
-	repoPath := PrepareMultiFixtures(t, "rebase_local_commits", []string{"rebase_parent"})
+	repoConfig := PrepareMultiFixtures(t, "rebase_local_commits", []string{"rebase_parent"})
 
-	err := rebase(repoPath)
+	err := rebase(repoConfig)
 	assert.NilError(t, err)
 
-	r, err := git.PlainOpen(repoPath)
+	r, err := git.PlainOpen(repoConfig.RepoPath)
 	assert.NilError(t, err)
 
 	head, err := r.Head()
@@ -42,12 +42,12 @@ func Test_RebaseLocalCommits(t *testing.T) {
 
 // New commits on remote
 func Test_RebaseRemoteCommits(t *testing.T) {
-	repoPath := PrepareMultiFixtures(t, "rebase_remote_commits", []string{"rebase_parent"})
+	repoConfig := PrepareMultiFixtures(t, "rebase_remote_commits", []string{"rebase_parent"})
 
-	err := rebase(repoPath)
+	err := rebase(repoConfig)
 	assert.NilError(t, err)
 
-	r, err := git.PlainOpen(repoPath)
+	r, err := git.PlainOpen(repoConfig.RepoPath)
 	assert.NilError(t, err)
 
 	head, err := r.Head()
@@ -58,12 +58,12 @@ func Test_RebaseRemoteCommits(t *testing.T) {
 
 // New commits on both, no conflict
 func Test_RebaseBothCommitsNoConflict(t *testing.T) {
-	repoPath := PrepareMultiFixtures(t, "rebase_both_commits", []string{"rebase_parent"})
+	repoConfig := PrepareMultiFixtures(t, "rebase_both_commits", []string{"rebase_parent"})
 
-	err := rebase(repoPath)
+	err := rebase(repoConfig)
 	assert.NilError(t, err)
 
-	r, err := git.PlainOpen(repoPath)
+	r, err := git.PlainOpen(repoConfig.RepoPath)
 	assert.NilError(t, err)
 
 	head, err := r.Head()
@@ -76,15 +76,15 @@ func Test_RebaseBothCommitsNoConflict(t *testing.T) {
 
 // New commits on both, some kind of conflict
 func Test_RebaseBothCommitsConflict(t *testing.T) {
-	repoPath := PrepareMultiFixtures(t, "rebase_both_commits_conflict", []string{"rebase_parent"})
+	repoConfig := PrepareMultiFixtures(t, "rebase_both_commits_conflict", []string{"rebase_parent"})
 
-	r, err := git.PlainOpen(repoPath)
+	r, err := git.PlainOpen(repoConfig.RepoPath)
 	assert.NilError(t, err)
 
 	origHead, err := r.Head()
 	assert.NilError(t, err)
 
-	err = rebase(repoPath)
+	err = rebase(repoConfig)
 	assert.Equal(t, err, errRebaseFailed)
 
 	newHead, err := r.Head()

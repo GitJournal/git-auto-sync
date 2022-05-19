@@ -44,7 +44,8 @@ func main() {
 						return tracerr.Wrap(err)
 					}
 
-					err = common.AutoSync(repoPath)
+					cfg := common.NewRepoConfig(repoPath)
+					err = common.AutoSync(cfg)
 					if err != nil {
 						return tracerr.Wrap(err)
 					}

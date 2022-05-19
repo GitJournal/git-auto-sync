@@ -7,7 +7,7 @@ import (
 )
 
 func Test_SimpleIgnore(t *testing.T) {
-	repoPath := PrepareFixture(t, "ignore")
+	repoPath := PrepareFixture(t, "ignore").RepoPath
 
 	ignore, err := isFileIgnoredByGit(repoPath, "1.txt")
 	assert.NilError(t, err)

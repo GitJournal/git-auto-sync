@@ -10,7 +10,8 @@ import (
 	git "gopkg.in/src-d/go-git.v4"
 )
 
-func commit(repoPath string) error {
+func commit(repoConfig RepoConfig) error {
+	repoPath := repoConfig.RepoPath
 	repo, err := git.PlainOpenWithOptions(repoPath, &git.PlainOpenOptions{DetectDotGit: true})
 	if err != nil {
 		return tracerr.Wrap(err)
@@ -65,7 +66,7 @@ func commit(repoPath string) error {
 		return nil
 	}
 
-	_, err = GitCommand(repoPath, []string{"commit", "-m", msg})
+	_, err = GitCommand(repoConfig, []string{"commit", "-m", msg})
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
@@ -73,7 +74,9 @@ func commit(repoPath string) error {
 	return nil
 }
 
-func GitCommand(repoPath string, args []string) (bytes.Buffer, error) {
+func GitCommand(repoConfig RepoConfig, args []string) (bytes.Buffer, error) {
+	repoPath := repoConfig.RepoPath
+
 	var outb, errb bytes.Buffer
 
 	statusCmd := exec.Command("git", args...)

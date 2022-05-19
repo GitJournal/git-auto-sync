@@ -8,26 +8,27 @@ import (
 )
 
 // FIXME: Add logs for when we commit, pull, and push
-func AutoSync(repoPath string) error {
+func AutoSync(repoConfig RepoConfig) error {
 	var err error
-	err = ensureGitAuthor(repoPath)
+	err = ensureGitAuthor(repoConfig)
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
 
-	err = commit(repoPath)
+	err = commit(repoConfig)
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
 
-	err = fetch(repoPath)
+	err = fetch(repoConfig)
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
 
-	err = rebase(repoPath)
+	err = rebase(repoConfig)
 	if err != nil {
 		if errors.Is(err, errRebaseFailed) {
+			repoPath := repoConfig.RepoPath
 			err := beeep.Alert("Git Auto Sync - Conflict", "Could not rebase for - "+repoPath, "assets/warning.png")
 			if err != nil {
 				return tracerr.Wrap(err)
@@ -39,7 +40,7 @@ func AutoSync(repoPath string) error {
 		return tracerr.Wrap(err)
 	}
 
-	err = push(repoPath)
+	err = push(repoConfig)
 	if err != nil {
 		return tracerr.Wrap(err)
 	}

@@ -33,7 +33,7 @@ func WatchForChanges(cfg RepoConfig) error {
 	repoPath := cfg.RepoPath
 	var err error
 
-	err = AutoSync(cfg.RepoPath)
+	err = AutoSync(cfg)
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
@@ -64,14 +64,14 @@ func WatchForChanges(cfg RepoConfig) error {
 					done <- true
 				}()
 
-				err := AutoSync(repoPath)
+				err := AutoSync(cfg)
 				if err != nil {
 					log.Fatalln(err)
 				}
 				continue
 
 			case <-pollTicker.C:
-				err := AutoSync(repoPath)
+				err := AutoSync(cfg)
 				if err != nil {
 					log.Fatalln(err)
 				}

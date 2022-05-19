@@ -13,7 +13,7 @@ import (
 	"gotest.tools/v3/assert"
 )
 
-func PrepareMultiFixtures(t *testing.T, name string, deps []string) string {
+func PrepareMultiFixtures(t *testing.T, name string, deps []string) RepoConfig {
 	newTestDataPath, err := ioutil.TempDir(os.TempDir(), "mutli_fixture")
 	assert.NilError(t, err)
 
@@ -27,10 +27,10 @@ func PrepareMultiFixtures(t *testing.T, name string, deps []string) string {
 		assert.NilError(t, err)
 	}
 
-	newRepoPath := PrepareFixture(t, name)
-	FixFixtureGitConfig(t, newRepoPath, newTestDataPath)
+	newRepoConfig := PrepareFixture(t, name)
+	FixFixtureGitConfig(t, newRepoConfig.RepoPath, newTestDataPath)
 
-	return newRepoPath
+	return newRepoConfig
 }
 
 func FixFixtureGitConfig(t *testing.T, newRepoPath string, testDataPath string) {
@@ -47,12 +47,12 @@ func FixFixtureGitConfig(t *testing.T, newRepoPath string, testDataPath string) 
 }
 
 func Test_SimpleFetch(t *testing.T) {
-	repoPath := PrepareMultiFixtures(t, "simple_fetch", []string{"multiple_file_change"})
+	repoConfig := PrepareMultiFixtures(t, "simple_fetch", []string{"multiple_file_change"})
 
-	err := fetch(repoPath)
+	err := fetch(repoConfig)
 	assert.NilError(t, err)
 
-	r, err := git.PlainOpen(repoPath)
+	r, err := git.PlainOpen(repoConfig.RepoPath)
 	assert.NilError(t, err)
 
 	head, err := r.Head()
