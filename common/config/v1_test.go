@@ -18,23 +18,23 @@ func setup(t *testing.T, name string) {
 	configdir.Refresh()
 }
 
-func Test_SimpleWriteRead(t *testing.T) {
+func Test_SimpleWriteReadV1(t *testing.T) {
 	setup(t, "SimpleWriteRead")
 
-	c := &Config{Repos: []string{"/home/xyz/hello"}}
-	err := Write(c)
+	c := &ConfigV1{Repos: []string{"/home/xyz/hello"}}
+	err := WriteV1(c)
 	assert.NilError(t, err)
 
-	c2, err := Read()
+	c2, err := ReadV1()
 	assert.NilError(t, err)
 
 	assert.DeepEqual(t, c, c2)
 }
 
-func Test_ReadEmpty(t *testing.T) {
+func Test_ReadEmptyV1(t *testing.T) {
 	setup(t, "ReadEmpty")
 
-	c, err := Read()
+	c, err := ReadV1()
 	assert.NilError(t, err)
 	assert.Assert(t, len(c.Repos) == 0)
 }
