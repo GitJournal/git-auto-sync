@@ -6,6 +6,7 @@ import (
 	"sync"
 
 	"github.com/GitJournal/git-auto-sync/common"
+	cfg "github.com/GitJournal/git-auto-sync/common/config"
 	"github.com/kardianos/service"
 )
 
@@ -17,7 +18,7 @@ func (d *Daemon) Start(s service.Service) error {
 }
 
 func (d *Daemon) run() {
-	config, err := common.ReadConfig()
+	config, err := cfg.Read()
 	if err != nil {
 		panic(err)
 	}

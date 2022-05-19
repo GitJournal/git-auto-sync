@@ -1,4 +1,4 @@
-package common
+package config
 
 import (
 	"encoding/json"
@@ -13,7 +13,7 @@ type Config struct {
 	Repos []string `json:"repos"`
 }
 
-func ReadConfig() (*Config, error) {
+func Read() (*Config, error) {
 	configPath := configdir.LocalConfig("git-auto-sync")
 	err := configdir.MakePath(configPath)
 	if err != nil {
@@ -43,7 +43,7 @@ func ReadConfig() (*Config, error) {
 	return &config, nil
 }
 
-func WriteConfig(config *Config) error {
+func Write(config *Config) error {
 	configPath := configdir.LocalConfig("git-auto-sync")
 	err := configdir.MakePath(configPath)
 	if err != nil {

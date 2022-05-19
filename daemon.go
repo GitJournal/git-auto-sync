@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/GitJournal/git-auto-sync/common"
+	cfg "github.com/GitJournal/git-auto-sync/common/config"
 	cli "github.com/urfave/cli/v2"
 	"github.com/ztrue/tracerr"
 	"golang.org/x/exp/slices"
@@ -26,7 +27,7 @@ var errRepoPathInvalid = errors.New("Not a valid git repo")
 // }
 
 func daemonList(ctx *cli.Context) error {
-	config, err := common.ReadConfig()
+	config, err := cfg.Read()
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
@@ -49,7 +50,7 @@ func daemonAdd(ctx *cli.Context) error {
 		return tracerr.Wrap(err)
 	}
 
-	config, err := common.ReadConfig()
+	config, err := cfg.Read()
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
@@ -60,7 +61,7 @@ func daemonAdd(ctx *cli.Context) error {
 		config.Repos = append(config.Repos, repoPath)
 	}
 
-	err = common.WriteConfig(config)
+	err = cfg.Write(config)
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
@@ -120,7 +121,7 @@ func daemonRm(ctx *cli.Context) error {
 		return tracerr.Wrap(err)
 	}
 
-	config, err := common.ReadConfig()
+	config, err := cfg.Read()
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
@@ -139,7 +140,7 @@ func daemonRm(ctx *cli.Context) error {
 	}
 
 	config.Repos = remove(config.Repos, pos)
-	err = common.WriteConfig(config)
+	err = cfg.Write(config)
 	if err != nil {
 		return tracerr.Wrap(err)
 	}
