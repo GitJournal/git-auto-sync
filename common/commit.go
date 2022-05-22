@@ -79,7 +79,12 @@ func GitCommand(repoConfig RepoConfig, args []string) (bytes.Buffer, error) {
 
 	var outb, errb bytes.Buffer
 
-	statusCmd := exec.Command("git", args...)
+	cmd := "git"
+	if repoConfig.GitExec != "" {
+		cmd = repoConfig.GitExec
+	}
+
+	statusCmd := exec.Command(cmd, args...)
 	statusCmd.Dir = repoPath
 	statusCmd.Stdout = &outb
 	statusCmd.Stderr = &errb
