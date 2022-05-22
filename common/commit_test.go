@@ -24,7 +24,10 @@ func PrepareFixture(t *testing.T, name string) RepoConfig {
 	err = os.Rename(filepath.Join(newRepoPath, ".gitted"), filepath.Join(newRepoPath, ".git"))
 	assert.NilError(t, err)
 
-	return NewRepoConfig(newRepoPath)
+	repoConfig, err := NewRepoConfig(newRepoPath)
+	assert.NilError(t, err)
+
+	return repoConfig
 }
 
 func Test_NoChanges(t *testing.T) {

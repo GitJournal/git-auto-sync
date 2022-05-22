@@ -2,11 +2,14 @@ package common
 
 import (
 	"log"
+	"os"
 	"path/filepath"
+	"strconv"
 	"time"
 
 	"github.com/rjeczalik/notify"
 	"github.com/ztrue/tracerr"
+	git "gopkg.in/src-d/go-git.v4"
 )
 
 // FIXME: Replace the logger with returning an error and retrying after 'x' minutes
@@ -22,12 +25,46 @@ type AwakeNotifier interface {
 	Start(chan bool) error
 }
 
-func NewRepoConfig(repoPath string) RepoConfig {
+func NewRepoConfig(repoPath string) (RepoConfig, error) {
+	repo, err := git.PlainOpen(repoPath)
+	if err != nil {
+		return RepoConfig{}, tracerr.Wrap(err)
+	}
+
+	config, err := repo.Config()
+	if err != nil {
+		return RepoConfig{}, tracerr.Wrap(err)
+	}
+
+	autoSyncSection := config.Raw.Section("auto-sync")
+
+	pollInterval := 10 * time.Minute
+	if autoSyncSection.Option("syncInterval") != "" {
+		secondsStr := autoSyncSection.Option("syncInterval")
+		seconds, err := strconv.Atoi(secondsStr)
+		if err != nil {
+			return RepoConfig{}, tracerr.Wrap(err)
+		}
+
+		pollInterval = time.Duration(seconds) * time.Second
+	}
+
+	gitExec := ""
+	if autoSyncSection.Option("exec") != "" {
+		gitExec = autoSyncSection.Option("exec")
+
+		_, err := os.Stat(gitExec)
+		if err != nil {
+			return RepoConfig{}, tracerr.Wrap(err)
+		}
+	}
+
 	return RepoConfig{
 		RepoPath:     repoPath,
-		PollInterval: 10 * time.Minute,
+		PollInterval: pollInterval,
 		FSLag:        1 * time.Second,
-	}
+		GitExec:      gitExec,
+	}, nil
 }
 
 func WatchForChanges(cfg RepoConfig) error {

@@ -31,7 +31,12 @@ func main() {
 						return tracerr.Wrap(err)
 					}
 
-					return common.WatchForChanges(common.NewRepoConfig(repoPath))
+					cfg, err := common.NewRepoConfig(repoPath)
+					if err != nil {
+						return tracerr.Wrap(err)
+					}
+
+					return common.WatchForChanges(cfg)
 				},
 			},
 			{
@@ -44,7 +49,11 @@ func main() {
 						return tracerr.Wrap(err)
 					}
 
-					cfg := common.NewRepoConfig(repoPath)
+					cfg, err := common.NewRepoConfig(repoPath)
+					if err != nil {
+						return tracerr.Wrap(err)
+					}
+
 					err = common.AutoSync(cfg)
 					if err != nil {
 						return tracerr.Wrap(err)
