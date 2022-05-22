@@ -20,3 +20,8 @@
 * Write about how to handle the case with an ssh-agent running
 
 * When stopping the daemon, do not do anything if it is not running
+
+* Avoid these thousands of commits each time one saves a file
+  - Try to batch them together?
+  - Or optionally, it should only be saved when the editor is closed
+    - For vim this means figuring out the backupfile directory
