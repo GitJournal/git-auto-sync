@@ -19,10 +19,7 @@ func ShouldIgnoreFile(repoPath string, filePath string) (bool, error) {
 	fileName := filepath.Base(filePath)
 	var isTempFile = strings.HasSuffix(fileName, ".swp") || // vim
 		strings.HasPrefix(fileName, "~") || // emacs
-		strings.HasSuffix(fileName, "~") || // kate
-		strings.HasPrefix(fileName, ".") // hidden files
-
-	// FIXME: Do not automatically ignore all hidden files, make this configurable
+		strings.HasSuffix(fileName, "~") // kate
 
 	if isTempFile {
 		return true, nil

@@ -17,3 +17,11 @@ func Test_SimpleIgnore(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, ignore, false)
 }
+
+func Test_HiddenFilesIgnore(t *testing.T) {
+	repoPath := PrepareFixture(t, "ignore").RepoPath
+
+	ignore, err := ShouldIgnoreFile(repoPath, ".hidden")
+	assert.NilError(t, err)
+	assert.Equal(t, ignore, false)
+}
