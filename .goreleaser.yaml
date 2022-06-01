@@ -112,6 +112,11 @@ snapcrafts:
 nfpms:
   - id: linux_packages
     file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    description: |
+      GitAutoSync is a simple command line program to automatically commit changes
+      to your git repo, and always keep that repo up to date. This way you can use
+      any editor with your text files, and never need to worry about committing
+      and remembering to push and pull changes.
     homepage: https://github.com/GitJournal/git-auto-sync
     license: Apache-2.0
     maintainer: Vishesh Handa <me@vhanda.in>
