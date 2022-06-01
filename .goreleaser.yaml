@@ -108,3 +108,19 @@ snapcrafts:
       git-auto-sync:
         command: git-auto-sync
         completer: completions/bash_autocomplete
+
+nfpms:
+  - id: linux_packages
+    file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    homepage: https://github.com/GitJournal/git-auto-sync
+    license: Apache-2.0
+    maintainer: Vishesh Handa <me@vhanda.in>
+    dependencies:
+      - git
+
+publishers:
+  - name: fury.io
+    ids:
+      - linux_packages
+    dir: "{{ dir .ArtifactPath }}"
+    cmd: curl -F package=@{{ .ArtifactName }} https://{{ .Env.FURY_TOKEN }}@push.fury.io/netdevops/

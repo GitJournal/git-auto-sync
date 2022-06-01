@@ -35,3 +35,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAP_GITHUB_TOKEN: ${{ secrets.TAP_GITHUB_TOKEN }}
           SNAPCRAFT_LOGIN: ${{ secrets.SNAPCRAFT_LOGIN }}
+          FURY_TOKEN: ${{ secrets.FURY_PUSH_TOKEN }}
