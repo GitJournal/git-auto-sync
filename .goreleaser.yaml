@@ -120,6 +120,10 @@ nfpms:
     homepage: https://github.com/GitJournal/git-auto-sync
     license: Apache-2.0
     maintainer: Vishesh Handa <me@vhanda.in>
+    formats:
+      - apk
+      - deb
+      - rpm
     dependencies:
       - git
 
