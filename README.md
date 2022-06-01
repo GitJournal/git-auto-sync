@@ -7,7 +7,23 @@ comitting and remembering to push and pull changes.
 ## Installation
 
 * OSX - `brew install GitJournal/tap/git-auto-sync`
-* Linux - Download the [latest release](https://github.com/GitJournal/git-auto-sync/releases/latest)
+* Linux -
+  - Ubuntu/Debian -
+
+    ```bash
+    sudo echo "deb [trusted=yes] https://apt.fury.io/vhanda/ /" > /etc/apt/sources.list.d/git-auto-sync.list
+    sudo apt-get update
+    sudo apt-get install -y git-auto-sync
+    ```
+  - Fedora/RPM -
+
+    ```bash
+    sudo echo -e "[git-auto-sync]\nname=Git-Auto-Sync\nbaseurl=https://yum.fury.io/vhanda/\nenabled=1\ngpgcheck=0" > /etc/yum.repos.d/git-auto-sync.repo
+    sudo yum update
+    sudo yum install -y git-auto-sync
+    ```
+  - Arch Linux - Please write an AUR package and open a PR for this. You're an Arch User. You got this.
+  - Other - Download the [latest release](https://github.com/GitJournal/git-auto-sync/releases/latest)
 * Windows - Download the [latest release](https://github.com/GitJournal/git-auto-sync/releases/latest)
 
 ## How to use?
