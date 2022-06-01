@@ -11,14 +11,14 @@ comitting and remembering to push and pull changes.
   - Ubuntu/Debian -
 
     ```bash
-    sudo echo "deb [trusted=yes] https://apt.fury.io/vhanda/ /" > /etc/apt/sources.list.d/git-auto-sync.list
+    sudo echo "deb [trusted=yes] https://apt.fury.io/vhanda/ /" | sudo tee /etc/apt/sources.list.d/git-auto-sync.list
     sudo apt-get update
     sudo apt-get install -y git-auto-sync
     ```
   - Fedora/RPM -
 
     ```bash
-    sudo echo -e "[git-auto-sync]\nname=Git-Auto-Sync\nbaseurl=https://yum.fury.io/vhanda/\nenabled=1\ngpgcheck=0" > /etc/yum.repos.d/git-auto-sync.repo
+    sudo echo -e "[git-auto-sync]\nname=Git-Auto-Sync\nbaseurl=https://yum.fury.io/vhanda/\nenabled=1\ngpgcheck=0" | sudo tee /etc/yum.repos.d/git-auto-sync.repo
     sudo yum update
     sudo yum install -y git-auto-sync
     ```
