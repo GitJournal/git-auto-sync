@@ -137,6 +137,11 @@ func daemonRm(ctx *cli.Context) error {
 		return tracerr.Wrap(err)
 	}
 
+	repoPath, err = isValidGitRepo(repoPath)
+	if err != nil {
+		return tracerr.Wrap(err)
+	}
+
 	config, err := cfg.Read()
 	if err != nil {
 		return tracerr.Wrap(err)

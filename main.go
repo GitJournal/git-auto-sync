@@ -31,6 +31,11 @@ func main() {
 						return tracerr.Wrap(err)
 					}
 
+					repoPath, err = isValidGitRepo(repoPath)
+					if err != nil {
+						return tracerr.Wrap(err)
+					}
+
 					cfg, err := common.NewRepoConfig(repoPath)
 					if err != nil {
 						return tracerr.Wrap(err)
@@ -45,6 +50,11 @@ func main() {
 				Usage:   "Sync a repo right now",
 				Action: func(ctx *cli.Context) error {
 					repoPath, err := os.Getwd()
+					if err != nil {
+						return tracerr.Wrap(err)
+					}
+
+					repoPath, err = isValidGitRepo(repoPath)
 					if err != nil {
 						return tracerr.Wrap(err)
 					}
