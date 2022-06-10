@@ -16,15 +16,31 @@ import (
 
 var errRepoPathInvalid = errors.New("Not a valid git repo")
 
-// func daemonStatus(ctx *cli.Context) error {
-// FIXME: Implement 'daemonStatus'
+func daemonStatus(ctx *cli.Context) error {
+	s, err := common.NewService()
+	if err != nil {
+		return tracerr.Wrap(err)
+	}
 
-// Print out the configuration
-// Print out uptime
-// Print out if there are any 'rebasing' issues and we are paused
+	err = s.Status()
+	if err != nil {
+		return tracerr.Wrap(err)
+	}
 
-// return nil
-// }
+	config, err := cfg.Read()
+	if err != nil {
+		return tracerr.Wrap(err)
+	}
+
+	fmt.Println("Monitoring - ")
+	for _, repoPath := range config.Repos {
+		fmt.Println("  ", repoPath)
+	}
+
+	// FIXME: Print out if there are any 'rebasing' issues and we are paused
+
+	return nil
+}
 
 func daemonList(ctx *cli.Context) error {
 	config, err := cfg.Read()

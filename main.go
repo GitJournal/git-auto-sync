@@ -104,12 +104,11 @@ func main() {
 				Aliases: []string{"d"},
 				Usage:   "Interact with the background daemon",
 				Subcommands: []*cli.Command{
-					// FIXME: Add a command to show the daemon's logs
-					// {
-					// 	Name:   "status",
-					// 	Usage:  "Show the Daemon's status",
-					// 	Action: daemonStatus,
-					// },
+					{
+						Name:   "status",
+						Usage:  "Show the Daemon's status",
+						Action: daemonStatus,
+					},
 					{
 						Name:    "list",
 						Aliases: []string{"ls"},

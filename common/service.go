@@ -120,3 +120,22 @@ func (srv Service) Disable() error {
 
 	return nil
 }
+
+func (srv Service) Status() error {
+	status, err := srv.Service.Status()
+	if err != nil {
+		return tracerr.Wrap(err)
+	}
+
+	switch status {
+	case service.StatusRunning:
+		fmt.Println("git-auto-sync-daemon is Running!")
+	case service.StatusStopped:
+		fmt.Println("git-auto-sync-daemon is NOT Running!")
+	case service.StatusUnknown:
+	default:
+		fmt.Println("git-auto-sync-daemon status is Unknown. How mysterious!")
+	}
+
+	return nil
+}
