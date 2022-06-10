@@ -40,7 +40,7 @@ in the file system and accordingly sync the changes.
 
 This daemon will be automatically started as a system process.
 
-You can check if it is running by looking for a process called `git-auto-sync-daemon`
+You can check if it is running `git-auto-sync daemon status`
 
 ### Background Daemon
 
