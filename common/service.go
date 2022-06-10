@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/kardianos/service"
@@ -37,15 +38,19 @@ func NewServiceWithDaemon(daemon service.Interface) (Service, error) {
 	exDirPath := filepath.Dir(ex)
 	executablePath := filepath.Join(exDirPath, "git-auto-sync-daemon")
 
+	deps := []string{}
+	if runtime.GOOS == "linux" {
+		deps = []string{"After=network-online.target syslog.target"}
+	}
+
 	svcConfig := &service.Config{
 		Name:        "git-auto-sync-daemon",
 		DisplayName: "Git Auto Sync Daemon",
 		Description: "Background Process for Auto Syncing Git Repos",
 
-		Executable: executablePath,
-		Dependencies: []string{
-			"After=network-online.target syslog.target"},
-		Option: options,
+		Executable:   executablePath,
+		Dependencies: deps,
+		Option:       options,
 	}
 
 	s, err := service.New(daemon, svcConfig)
