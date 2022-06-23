@@ -141,12 +141,16 @@ func main() {
 						Usage:  "Add a repo for auto-sync",
 						Action: daemonAdd,
 					},
-
 					{
 						Name:    "remove",
 						Aliases: []string{"rm"},
 						Usage:   "Remove a repo from auto-sync",
 						Action:  daemonRm,
+					},
+					{
+						Name:   "env",
+						Usage:  "Set an environment variable",
+						Action: daemonEnv,
 					},
 				},
 			},

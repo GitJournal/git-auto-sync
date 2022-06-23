@@ -11,6 +11,7 @@ import (
 
 type ConfigV1 struct {
 	Repos []string `json:"repos"`
+	Envs  []string `json:"envs"`
 }
 
 func ReadV1() (*ConfigV1, error) {

@@ -21,7 +21,10 @@ func setup(t *testing.T, name string) {
 func Test_SimpleWriteReadV1(t *testing.T) {
 	setup(t, "SimpleWriteRead")
 
-	c := &ConfigV1{Repos: []string{"/home/xyz/hello"}}
+	c := &ConfigV1{
+		Repos: []string{"/home/xyz/hello"},
+		Envs:  []string{"SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.74ZznY1v1F/Listeners"},
+	}
 	err := WriteV1(c)
 	assert.NilError(t, err)
 
