@@ -71,9 +71,7 @@ func main() {
 						return tracerr.Wrap(err)
 					}
 
-					for _, e := range ctx.StringSlice("env") {
-						cfg.Env = append(cfg.Env, e)
-					}
+					cfg.Env = append(cfg.Env, ctx.StringSlice("env")...)
 
 					err = common.AutoSync(cfg)
 					if err != nil {

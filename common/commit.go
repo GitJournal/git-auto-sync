@@ -107,9 +107,7 @@ func GitCommand(repoConfig RepoConfig, args []string) (bytes.Buffer, error) {
 
 func toEnvString(repoConfig RepoConfig) []string {
 	vals := repoConfig.Env
-	for _, v := range repoConfig.Env {
-		vals = append(vals, v)
-	}
+	vals = append(vals, repoConfig.Env...)
 
 	for _, s := range os.Environ() {
 		parts := strings.Split(s, "=")
