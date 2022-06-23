@@ -19,6 +19,7 @@ type RepoConfig struct {
 	PollInterval time.Duration
 	FSLag        time.Duration
 	GitExec      string
+	Env          map[string]string
 }
 
 type AwakeNotifier interface {

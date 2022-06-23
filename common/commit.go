@@ -2,6 +2,8 @@ package common
 
 import (
 	"bytes"
+	"fmt"
+	"os"
 	"os/exec"
 	"sort"
 	"strings"
@@ -88,12 +90,46 @@ func GitCommand(repoConfig RepoConfig, args []string) (bytes.Buffer, error) {
 	statusCmd.Dir = repoPath
 	statusCmd.Stdout = &outb
 	statusCmd.Stderr = &errb
+	statusCmd.Env = toEnvString(repoConfig)
 	err := statusCmd.Run()
+
+	if hasEnvVariable(os.Environ(), "SSH_AUTH_SOCK") && !hasEnvVariable(statusCmd.Env, "SSH_AUTH_SOCK") {
+		fmt.Println("WARNING: SSH_AUTH_SOCK env variable isn't being passed")
+	}
 
 	if err != nil {
 		fullCmd := "git " + strings.Join(args, " ")
-		err := tracerr.Errorf("%w: Command: %s\nStdOut: %s\nStdErr: %s", err, fullCmd, outb.String(), errb.String())
+		err := tracerr.Errorf("%w: Command: %s\nEnv: %s\nStdOut: %s\nStdErr: %s", err, fullCmd, statusCmd.Env, outb.String(), errb.String())
 		return outb, err
 	}
 	return outb, nil
+}
+
+func toEnvString(repoConfig RepoConfig) []string {
+	vals := []string{}
+	for k, v := range repoConfig.Env {
+		val := fmt.Sprintf("%s=%s", k, v)
+		vals = append(vals, val)
+	}
+
+	for _, s := range os.Environ() {
+		parts := strings.Split(s, "=")
+		k := parts[0]
+		if k == "HOME" {
+			vals = append(vals, s)
+		}
+	}
+
+	return vals
+}
+
+func hasEnvVariable(all []string, name string) bool {
+	for _, s := range all {
+		parts := strings.Split(s, "=")
+		k := parts[0]
+		if k == name {
+			return true
+		}
+	}
+	return false
 }
