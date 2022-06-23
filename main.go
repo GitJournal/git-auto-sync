@@ -48,6 +48,13 @@ func main() {
 				Name:    "sync",
 				Aliases: []string{"s"},
 				Usage:   "Sync a repo right now",
+				Flags: []cli.Flag{
+					&cli.StringSliceFlag{
+						Name:    "env",
+						Aliases: []string{"e"},
+						Usage:   "Env variables to pass",
+					},
+				},
 				Action: func(ctx *cli.Context) error {
 					repoPath, err := os.Getwd()
 					if err != nil {
@@ -62,6 +69,10 @@ func main() {
 					cfg, err := common.NewRepoConfig(repoPath)
 					if err != nil {
 						return tracerr.Wrap(err)
+					}
+
+					for _, e := range ctx.StringSlice("env") {
+						cfg.Env = append(cfg.Env, e)
 					}
 
 					err = common.AutoSync(cfg)
