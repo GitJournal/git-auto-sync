@@ -93,7 +93,7 @@ func GitCommand(repoConfig RepoConfig, args []string) (bytes.Buffer, error) {
 	statusCmd.Env = toEnvString(repoConfig)
 	err := statusCmd.Run()
 
-	if hasEnvVariable(os.Environ(), "SSH_AUTH_SOCK") && !hasEnvVariable(statusCmd.Env, "SSH_AUTH_SOCK") {
+	if hasEnvVariable(os.Environ(), "SSH_AUTH_SOCK") && !hasEnvVariable(repoConfig.Env, "SSH_AUTH_SOCK") {
 		fmt.Println("WARNING: SSH_AUTH_SOCK env variable isn't being passed")
 	}
 
@@ -106,10 +106,9 @@ func GitCommand(repoConfig RepoConfig, args []string) (bytes.Buffer, error) {
 }
 
 func toEnvString(repoConfig RepoConfig) []string {
-	vals := []string{}
-	for k, v := range repoConfig.Env {
-		val := fmt.Sprintf("%s=%s", k, v)
-		vals = append(vals, val)
+	vals := repoConfig.Env
+	for _, v := range repoConfig.Env {
+		vals = append(vals, v)
 	}
 
 	for _, s := range os.Environ() {
