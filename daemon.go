@@ -113,7 +113,9 @@ func isValidGitRepo(repoPath string) (string, error) {
 	for {
 		info, err := os.Stat(filepath.Join(repoPath, ".git"))
 		if err != nil {
-			return "", tracerr.Errorf("%w - %s", errRepoPathInvalid, repoPath)
+			if !os.IsNotExist(err) {
+				return "", tracerr.Errorf("%w - %s", errRepoPathInvalid, repoPath)
+			}
 		}
 
 		if os.IsNotExist(err) {
