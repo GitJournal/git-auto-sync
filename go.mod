@@ -4,11 +4,11 @@ go 1.18
 
 require (
 	github.com/gen2brain/beeep v0.0.0-20220402123239-6a3042f4b71a
-	github.com/kardianos/service v1.2.1
+	github.com/kardianos/service v1.2.2
 	github.com/kirsle/configdir v0.0.0-20170128060238-e45d2f54772f
 	github.com/otiai10/copy v1.7.0
 	github.com/prashantgupta24/mac-sleep-notifier v1.0.1
-	github.com/rjeczalik/notify v0.9.2
+	github.com/rjeczalik/notify v0.9.3
 	github.com/urfave/cli/v2 v2.5.1
 	github.com/ztrue/tracerr v0.3.0
 	golang.org/x/exp v0.0.0-20220428152302-39d4317da171
