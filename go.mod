@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/gen2brain/beeep v0.0.0-20220402123239-6a3042f4b71a
-	github.com/kardianos/service v1.2.1
+	github.com/kardianos/service v1.2.2
 	github.com/kirsle/configdir v0.0.0-20170128060238-e45d2f54772f
 	github.com/otiai10/copy v1.7.0
 	github.com/prashantgupta24/mac-sleep-notifier v1.0.1
