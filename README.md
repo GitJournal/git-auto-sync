@@ -22,7 +22,13 @@ comitting and remembering to push and pull changes.
     sudo yum update
     sudo yum install -y git-auto-sync
     ```
-  - Arch Linux - Please write an AUR package and open a PR for this. You're an Arch User. You got this.
+  - Arch Linux -
+
+    ```bash
+    yay -S git-auto-sync
+    # OR
+    paru -S git-auto-sync
+    ```
   - Other - Download the [latest release](https://github.com/GitJournal/git-auto-sync/releases/latest)
 * Windows - Download the [latest release](https://github.com/GitJournal/git-auto-sync/releases/latest)
 
