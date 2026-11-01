@@ -2,7 +2,6 @@ package common
 
 import (
 	"bytes"
-	"fmt"
 	"os"
 	"os/exec"
 	"sort"
@@ -99,10 +98,6 @@ func GitCommand(repoConfig RepoConfig, args []string) (bytes.Buffer, error) {
 	statusCmd.Stderr = &errb
 	statusCmd.Env = toEnvString(repoConfig)
 	err := statusCmd.Run()
-
-	if hasEnvVariable(os.Environ(), "SSH_AUTH_SOCK") && !hasEnvVariable(repoConfig.Env, "SSH_AUTH_SOCK") {
-		fmt.Println("WARNING: SSH_AUTH_SOCK env variable isn't being passed")
-	}
 
 	if err != nil {
 		fullCmd := "git " + strings.Join(args, " ")
