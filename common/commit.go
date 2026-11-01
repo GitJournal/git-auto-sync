@@ -2,7 +2,6 @@ package common
 
 import (
 	"bytes"
-	"fmt"
 	"os"
 	"os/exec"
 	"sort"
@@ -63,6 +62,13 @@ func commit(repoConfig RepoConfig) error {
 
 	sort.Strings(commitMsg)
 	msg := strings.Join(commitMsg, "\n")
+	rawConfig, err := repo.Storer.Config()
+	autoSyncSection := rawConfig.Raw.Section("auto-sync")
+	header := autoSyncSection.Options.Get("header")
+	if header == "" { // Concerning that an explicit "" is getting overridden...
+		header = "Git Auto Sync"
+	}
+	msg = header+"\n"+msg
 
 	if !hasChanges {
 		return nil
@@ -93,10 +99,6 @@ func GitCommand(repoConfig RepoConfig, args []string) (bytes.Buffer, error) {
 	statusCmd.Env = toEnvString(repoConfig)
 	err := statusCmd.Run()
 
-	if hasEnvVariable(os.Environ(), "SSH_AUTH_SOCK") && !hasEnvVariable(repoConfig.Env, "SSH_AUTH_SOCK") {
-		fmt.Println("WARNING: SSH_AUTH_SOCK env variable isn't being passed")
-	}
-
 	if err != nil {
 		fullCmd := "git " + strings.Join(args, " ")
 		err := tracerr.Errorf("%w: Command: %s\nEnv: %s\nStdOut: %s\nStdErr: %s", err, fullCmd, statusCmd.Env, outb.String(), errb.String())
@@ -106,8 +108,7 @@ func GitCommand(repoConfig RepoConfig, args []string) (bytes.Buffer, error) {
 }
 
 func toEnvString(repoConfig RepoConfig) []string {
-	vals := repoConfig.Env
-	vals = append(vals, repoConfig.Env...)
+	vals := append([]string(nil), repoConfig.Env...)
 
 	for _, s := range os.Environ() {
 		parts := strings.Split(s, "=")
