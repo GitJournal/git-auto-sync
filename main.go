@@ -25,6 +25,13 @@ func main() {
 				Name:    "watch",
 				Aliases: []string{"monitor", "w", "m"},
 				Usage:   "Monitor a folder for changes",
+				Flags: []cli.Flag{
+					&cli.StringSliceFlag{
+						Name:    "env",
+						Aliases: []string{"e"},
+						Usage:   "Env variables to pass",
+					},
+				},
 				Action: func(ctx *cli.Context) error {
 					repoPath, err := os.Getwd()
 					if err != nil {
@@ -40,6 +47,7 @@ func main() {
 					if err != nil {
 						return tracerr.Wrap(err)
 					}
+					cfg.Env = append(cfg.Env, ctx.StringSlice("env")...)
 
 					return common.WatchForChanges(cfg)
 				},
